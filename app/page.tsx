@@ -1,113 +1,197 @@
-import Image from "next/image";
+"use client";
+
+import { useEffect, useState } from "react";
+import HeroSection from "@/components/HeroSection";
+import FeatureCards from "@/components/FeatureCards";
+import ContentBlock from "@/components/ContentBlock";
+import ProductCard from "@/components/ProductCard";
+import { motion } from "framer-motion";
+import { getPageContent } from "@/lib/firestore";
+import { HomeContent } from "@/types/content";
+
+const defaults: HomeContent = {
+  heroHeading: "Premium Halal Lamb & Mutton",
+  heroSubheading: "Trusted Worldwide Since 1980",
+  heroBody:
+    "Pak Mecca Meats Ltd stands as a prominent supplier of high-quality lamb and mutton carcasses globally. Processing 15,000–20,000 carcasses per week, we proudly serve communities in the UK, mainland Europe, the Middle East, and beyond.",
+  heroBg: "https://images.unsplash.com/photo-1624991954017-b0e1c09e2c6e?w=1600",
+  features: [
+    {
+      title: "HMC Halal Certified",
+      description:
+        "Certified by the Halal Monitoring Committee — the most established Halal accreditation body in the EU, ensuring full Shariah compliance from farm to plate.",
+    },
+    {
+      title: "Global Supplier Since 1980",
+      description:
+        "From humble beginnings in South Wales to supplying the UK, mainland Europe, the Middle East and beyond — a legacy built on trust and quality.",
+    },
+    {
+      title: "15,000–20,000 Carcasses/Week",
+      description:
+        "Our specialist Birmingham facilities and 150+ dedicated colleagues process an impressive volume while upholding the highest quality standards.",
+    },
+  ],
+  aboutHeading: "A Tradition of Quality Since 1980",
+  aboutBody:
+    "Founded in 1980 by Mohammed Akram, Pak Mecca Meats Ltd has grown from a small trading venture in South Wales into one of the UK's most well-established halal meat suppliers. With over 150 dedicated colleagues and facilities in central Birmingham, we process 15,000–20,000 lamb and mutton carcasses every week.",
+  aboutImg: "https://images.unsplash.com/photo-1600891964092-4316c288032e?w=800",
+  stats: [
+    { number: "150+", label: "Dedicated Colleagues" },
+    { number: "15,000–20,000", label: "Carcasses Per Week" },
+    { number: "40+", label: "Years Established" },
+    { number: "3", label: "Continents Served" },
+  ],
+  productsPreview: [
+    {
+      title: "Lamb Cuts",
+      description:
+        "From bone-in legs to saddles and shoulders — premium British lamb, vacuum-packed to your specification.",
+      image: "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=600",
+      link: "/products",
+    },
+    {
+      title: "Mutton Cuts",
+      description:
+        "A full range of mutton — legs, chops, diced, tenderloin and more. Halal certified, fresh or frozen.",
+      image: "https://images.unsplash.com/photo-1558030006-450675393462?w=600",
+      link: "/products",
+    },
+    {
+      title: "Offal & More",
+      description:
+        "Heads, tongues, liver, kidneys, tripe and feet — all prepared to the highest Halal compliance standards.",
+      image: "https://images.unsplash.com/photo-1624991954017-b0e1c09e2c6e?w=600",
+      link: "/products",
+    },
+  ],
+};
+
+const certs = [
+  "HMC Halal Certified",
+  "HACCP Certified",
+  "Food Standards Agency",
+  "BRC Food Safety",
+  "Est. 1980",
+];
 
 export default function Home() {
+  const [content, setContent] = useState<HomeContent>(defaults);
+
+  useEffect(() => {
+    async function loadContent() {
+      const dbContent = await getPageContent("home");
+      if (dbContent) {
+        setContent({
+          heroHeading: dbContent.heroHeading || defaults.heroHeading,
+          heroSubheading: dbContent.heroSubheading || defaults.heroSubheading,
+          heroBody: dbContent.heroBody || defaults.heroBody,
+          heroBg: dbContent.heroBg || defaults.heroBg,
+          features: dbContent.features || defaults.features,
+          aboutHeading: dbContent.aboutHeading || defaults.aboutHeading,
+          aboutBody: dbContent.aboutBody || defaults.aboutBody,
+          aboutImg: dbContent.aboutImg || defaults.aboutImg,
+          stats: dbContent.stats || defaults.stats,
+          productsPreview: dbContent.productsPreview || defaults.productsPreview,
+        });
+      }
+    }
+    loadContent();
+  }, []);
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <div className="flex flex-col min-h-screen">
+      {/* Hero */}
+      <HeroSection
+        heading={content.heroHeading}
+        subheading={content.heroSubheading}
+        bodyText={content.heroBody}
+        bgImage={content.heroBg}
+        primaryBtnText="Explore Products"
+        primaryBtnLink="/products"
+        secondaryBtnText="About Us"
+        secondaryBtnLink="/about"
+      />
+
+      {/* Feature Cards Grid */}
+      <FeatureCards features={content.features} />
+
+      {/* Alternating About Section */}
+      <ContentBlock
+        heading={content.aboutHeading}
+        body={content.aboutBody}
+        image={content.aboutImg}
+        btnText="Learn More About Us"
+        btnLink="/about"
+      />
+
+      {/* Stats Bar */}
+      <section className="bg-brand-green py-12 md:py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 xl:px-24">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 text-white text-center">
+            {content.stats.map((stat, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="flex flex-col items-center space-y-1"
+              >
+                <span className="text-3xl sm:text-4xl xl:text-5xl font-black text-brand-gold leading-none">
+                  {stat.number}
+                </span>
+                <span className="text-xs sm:text-sm uppercase tracking-widest font-semibold text-white/80">
+                  {stat.label}
+                </span>
+              </motion.div>
+            ))}
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
+      {/* Products Preview Section */}
+      <section className="py-16 md:py-24 bg-brand-light">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 xl:px-24">
+          <div className="text-center max-w-2xl mx-auto mb-12 lg:mb-16">
+            <span className="text-brand-gold text-sm font-bold uppercase tracking-wider">
+              Our Selection
             </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-brand-dark mt-2">
+              Premium Halal Products
+            </h2>
+            <div className="h-1 w-20 bg-brand-green mx-auto mt-4" />
+          </div>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {content.productsPreview.map((item, index) => (
+              <ProductCard
+                key={index}
+                title={item.title}
+                description={item.description}
+                image={item.image}
+                link={item.link}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+      {/* Certifications Strip */}
+      <section className="py-10 bg-brand-dark border-y border-white/5 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 xl:px-24">
+          <div className="flex items-center lg:justify-center overflow-x-auto lg:overflow-x-visible pb-4 lg:pb-0 gap-4 scrollbar-none snap-x snap-mandatory">
+            {certs.map((badge, index) => (
+              <div
+                key={index}
+                className="snap-center shrink-0 border border-brand-gold/60 text-brand-gold text-xs sm:text-sm uppercase tracking-wider font-bold px-6 py-2.5 rounded-full bg-brand-gold/5 whitespace-nowrap hover:bg-brand-gold hover:text-brand-dark transition-colors duration-300"
+              >
+                {badge}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }

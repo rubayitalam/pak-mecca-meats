@@ -19,17 +19,20 @@ const defaults: HomeContent = {
       title: "HMC Halal Certified",
       description:
         "Certified by the Halal Monitoring Committee — the most established Halal accreditation body in the EU, ensuring full Shariah compliance from farm to plate.",
-    },
+      image: "",
+    } as any,
     {
       title: "Global Supplier Since 1980",
       description:
         "From humble beginnings in South Wales to supplying the UK, mainland Europe, the Middle East and beyond — a legacy built on trust and quality.",
-    },
+      image: "",
+    } as any,
     {
       title: "15,000–20,000 Carcasses/Week",
       description:
         "Our specialist Birmingham facilities and 150+ dedicated colleagues process an impressive volume while upholding the highest quality standards.",
-    },
+      image: "",
+    } as any,
   ],
   aboutHeading: "A Tradition of Quality Since 1980",
   aboutBody:
@@ -120,7 +123,7 @@ export default function Home() {
           <ContentBlock
             heading={content.features[0].title}
             body={content.features[0].description}
-            image="https://images.unsplash.com/photo-1584744982491-665216d95f8b?w=800"
+            image={(content.features[0] as any).image || "https://images.unsplash.com/photo-1584744982491-665216d95f8b?w=800"}
             reverse={false}
             label="AUTHENTICITY"
             bgColor="bg-[#FAFAFA]"
@@ -130,7 +133,7 @@ export default function Home() {
           <ContentBlock
             heading={content.features[1].title}
             body={content.features[1].description}
-            image="https://images.unsplash.com/photo-1600891964092-4316c288032e?w=800"
+            image={(content.features[1] as any).image || "https://images.unsplash.com/photo-1600891964092-4316c288032e?w=800"}
             reverse={true}
             label="LEGACY"
             bgColor="bg-white"
@@ -140,7 +143,7 @@ export default function Home() {
           <ContentBlock
             heading={content.features[2].title}
             body={content.features[2].description}
-            image="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800"
+            image={(content.features[2] as any).image || "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800"}
             reverse={false}
             label="CAPACITY"
             bgColor="bg-[#FAFAFA]"

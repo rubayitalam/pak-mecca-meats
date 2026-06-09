@@ -43,6 +43,45 @@ export default function HeroSection({
     }),
   };
 
+  const wordVariants = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 30 },
+    visible: (delay: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        delay: shouldReduceMotion ? 0 : delay,
+        ease: [0.16, 1, 0.3, 1],
+      },
+    }),
+  };
+
+  const headingVariants = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        delay: shouldReduceMotion ? 0 : 0.7,
+        ease: [0.16, 1, 0.3, 1],
+      },
+    },
+  };
+
+  const buttonVariants = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        delay: shouldReduceMotion ? 0 : 0.9,
+        ease: [0.16, 1, 0.3, 1],
+      },
+    },
+  };
+
   return (
     <section className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-[#1A1A1A]">
       {/* Background Image */}
@@ -64,28 +103,39 @@ export default function HeroSection({
         {isHome ? (
           <>
             {/* 1. WORDS DISPLAY: Stacked at once, visible simultaneously, white, text-6xl md:text-8xl, tracking-widest */}
-            <motion.div
-              custom={0}
-              variants={fadeUpVariants}
-              initial="hidden"
-              animate="visible"
-              className="flex flex-col space-y-2 select-none"
-            >
-              <span className="text-5xl sm:text-7xl md:text-8xl font-bold text-white tracking-widest uppercase">
+            <div className="flex flex-col space-y-2 select-none">
+              <motion.span
+                custom={0}
+                variants={wordVariants}
+                initial="hidden"
+                animate="visible"
+                className="text-5xl sm:text-7xl md:text-8xl font-bold text-white tracking-widest uppercase block"
+              >
                 QUALITY
-              </span>
-              <span className="text-5xl sm:text-7xl md:text-8xl font-bold text-white tracking-widest uppercase">
+              </motion.span>
+              <motion.span
+                custom={0.2}
+                variants={wordVariants}
+                initial="hidden"
+                animate="visible"
+                className="text-5xl sm:text-7xl md:text-8xl font-bold text-white tracking-widest uppercase block"
+              >
                 INTEGRITY
-              </span>
-              <span className="text-5xl sm:text-7xl md:text-8xl font-bold text-white tracking-widest uppercase">
+              </motion.span>
+              <motion.span
+                custom={0.4}
+                variants={wordVariants}
+                initial="hidden"
+                animate="visible"
+                className="text-5xl sm:text-7xl md:text-8xl font-bold text-white tracking-widest uppercase block"
+              >
                 EXCELLENCE
-              </span>
-            </motion.div>
+              </motion.span>
+            </div>
 
             {/* 3. MAIN HEADING: below the 3 words, text-xl md:text-2xl, font-light, white, tracking-wide, mt-8 */}
             <motion.h1
-              custom={0.3}
-              variants={fadeUpVariants}
+              variants={headingVariants}
               initial="hidden"
               animate="visible"
               className="text-white font-light text-xl md:text-2xl tracking-wide mt-8 max-w-3xl"
@@ -95,8 +145,7 @@ export default function HeroSection({
 
             {/* 5. CTA BUTTON: Discover More, thin border, white, no fill, hover fill white/text dark */}
             <motion.div
-              custom={0.6}
-              variants={fadeUpVariants}
+              variants={buttonVariants}
               initial="hidden"
               animate="visible"
               className="mt-10"

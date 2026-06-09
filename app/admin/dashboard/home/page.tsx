@@ -12,9 +12,9 @@ const defaults: HomeContent = {
     "Pak Mecca Meats Ltd stands as a prominent supplier of high-quality lamb and mutton carcasses globally. Processing 15,000–20,000 carcasses per week, we proudly serve communities in the UK, mainland Europe, the Middle East, and beyond.",
   heroBg: "https://images.unsplash.com/photo-1624991954017-b0e1c09e2c6e?w=1600",
   features: [
-    { title: "HMC Halal Certified", description: "Certified by the Halal Monitoring Committee — the most established Halal accreditation body in the EU, ensuring full Shariah compliance from farm to plate." },
-    { title: "Global Supplier Since 1980", description: "From humble beginnings in South Wales to supplying the UK, mainland Europe, the Middle East and beyond — a legacy built on trust and quality." },
-    { title: "15,000–20,000 Carcasses/Week", description: "Our specialist Birmingham facilities and 150+ dedicated colleagues process an impressive volume while upholding the highest quality standards." },
+    { title: "HMC Halal Certified", description: "Certified by the Halal Monitoring Committee — the most established Halal accreditation body in the EU, ensuring full Shariah compliance from farm to plate.", image: "" } as any,
+    { title: "Global Supplier Since 1980", description: "From humble beginnings in South Wales to supplying the UK, mainland Europe, the Middle East and beyond — a legacy built on trust and quality.", image: "" } as any,
+    { title: "15,000–20,000 Carcasses/Week", description: "Our specialist Birmingham facilities and 150+ dedicated colleagues process an impressive volume while upholding the highest quality standards.", image: "" } as any,
   ],
   aboutHeading: "A Tradition of Quality Since 1980",
   aboutBody:
@@ -270,6 +270,30 @@ export default function HomeEditor() {
                   }}
                   className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-xs bg-white text-brand-dark"
                 />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-gray-700 mb-1">Block Image URL</label>
+                <input
+                  type="text"
+                  value={(feature as any).image || ""}
+                  onChange={(e) => {
+                    const newFeatures = [...data.features];
+                    newFeatures[index] = { ...newFeatures[index], image: e.target.value } as any;
+                    setData({ ...data, features: newFeatures });
+                  }}
+                  placeholder="https://images.unsplash.com/..."
+                  className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-xs bg-white text-brand-dark"
+                />
+                {(feature as any).image && (
+                  <div className="relative w-[80px] h-[80px] rounded border overflow-hidden mt-2 bg-gray-50">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={(feature as any).image}
+                      alt={`Block ${index + 1} Preview`}
+                      className="object-cover w-full h-full"
+                    />
+                  </div>
+                )}
               </div>
             </div>
           ))}

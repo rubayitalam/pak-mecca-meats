@@ -48,7 +48,7 @@ export default function Assurance() {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-white">
       {/* Hero */}
       <HeroSection
         heading={content.heroHeading}
@@ -56,19 +56,22 @@ export default function Assurance() {
         bgImage={content.heroBg}
       />
 
-      {/* Alternating Sections */}
+      {/* Alternating Sections with large background numbers */}
       <div className="flex flex-col">
         {content.sections.map((section, index) => {
           const isEven = index % 2 === 0;
+          const displayNum = index + 1 < 10 ? `0${index + 1}` : `${index + 1}`;
           return (
-            <div key={index} className={isEven ? "bg-white" : "bg-brand-light"}>
-              <ContentBlock
-                heading={section.heading}
-                body={section.body}
-                image={section.image}
-                reverse={!isEven}
-              />
-            </div>
+            <ContentBlock
+              key={index}
+              heading={section.heading}
+              body={section.body}
+              image={section.image}
+              reverse={!isEven}
+              label="STANDARDS & COMPLIANCE"
+              decorativeNumber={displayNum}
+              bgColor={isEven ? "bg-white" : "bg-[#FAFAFA]"}
+            />
           );
         })}
       </div>

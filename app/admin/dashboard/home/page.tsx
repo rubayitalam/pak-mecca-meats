@@ -33,13 +33,27 @@ const defaults: HomeContent = {
   ],
 };
 
+interface SiteSettingsState {
+  logoUrl: string;
+  siteName: string;
+  tagline: string;
+}
+
 export default function HomeEditor() {
   const [data, setData] = useState<HomeContent>(defaults);
+  const [settings, setSettings] = useState<SiteSettingsState>({
+    logoUrl: "/logo.png",
+    siteName: "Pak Mecca Meats",
+    tagline: "Honouring Tradition With Unmatched Quality",
+  });
+  
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [savingSettings, setSavingSettings] = useState(false);
 
   useEffect(() => {
     async function load() {
+      // Load homepage content
       const dbData = await getPageContent("home");
       if (dbData) {
         setData({
@@ -55,6 +69,17 @@ export default function HomeEditor() {
           productsPreview: dbData.productsPreview || defaults.productsPreview,
         });
       }
+
+      // Load site settings
+      const dbSettings = await getPageContent("settings");
+      if (dbSettings) {
+        setSettings({
+          logoUrl: dbSettings.logoUrl || "/logo.png",
+          siteName: dbSettings.siteName || "Pak Mecca Meats",
+          tagline: dbSettings.tagline || "Honouring Tradition With Unmatched Quality",
+        });
+      }
+
       setLoading(false);
     }
     load();
@@ -71,6 +96,17 @@ export default function HomeEditor() {
     setSaving(false);
   };
 
+  const handleSaveSettings = async () => {
+    setSavingSettings(true);
+    const success = await savePageContent("settings", settings);
+    if (success) {
+      toast.success("Site settings saved successfully!");
+    } else {
+      toast.error("Failed to save site settings. Check permissions.");
+    }
+    setSavingSettings(false);
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -79,11 +115,74 @@ export default function HomeEditor() {
     );
   }
 
+  // Resolve preview logo URL locally if default "/logo.png" is used
+  const previewLogoUrl = settings.logoUrl === "/logo.png" ? "/Pak Mecca Logo.png" : settings.logoUrl;
+
   return (
     <div className="space-y-10 max-w-4xl">
       <div>
-        <h1 className="text-2xl font-bold text-brand-dark">Home Page Content Editor</h1>
-        <p className="text-gray-500 text-sm mt-1">Manage the content that appears on the homepage.</p>
+        <h1 className="text-2xl font-bold text-brand-dark">Dashboard home</h1>
+        <p className="text-gray-500 text-sm mt-1">Manage global site settings and homepage content.</p>
+      </div>
+
+      {/* SITE SETTINGS (At the top) */}
+      <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm space-y-6">
+        <h2 className="text-lg font-bold text-brand-dark border-b pb-2">Site Settings</h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+          <div className="md:col-span-2 space-y-4">
+            <div>
+              <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Logo URL</label>
+              <input
+                type="text"
+                value={settings.logoUrl}
+                onChange={(e) => setSettings({ ...settings, logoUrl: e.target.value })}
+                className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm bg-white text-brand-dark"
+                placeholder="/logo.png"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Site Name</label>
+              <input
+                type="text"
+                value={settings.siteName}
+                onChange={(e) => setSettings({ ...settings, siteName: e.target.value })}
+                className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm bg-white text-brand-dark"
+                placeholder="Pak Mecca Meats"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Tagline</label>
+              <input
+                type="text"
+                value={settings.tagline}
+                onChange={(e) => setSettings({ ...settings, tagline: e.target.value })}
+                className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm bg-white text-brand-dark"
+                placeholder="Honouring Tradition With Unmatched Quality"
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col items-center justify-center border border-dashed border-gray-200 p-4 rounded h-full bg-gray-50 min-h-[180px]">
+            <span className="text-xs text-gray-400 mb-3">Logo Preview (80px)</span>
+            <div className="relative h-20 w-20 flex items-center justify-center bg-gray-900 border border-gray-800 rounded p-1 overflow-hidden">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={previewLogoUrl}
+                alt="Logo Preview"
+                className="max-h-full max-w-full object-contain"
+              />
+            </div>
+          </div>
+        </div>
+
+        <button
+          onClick={handleSaveSettings}
+          disabled={savingSettings}
+          className="px-6 py-2.5 bg-brand-green hover:bg-brand-green/90 text-white font-bold rounded shadow transition-all duration-200 text-xs uppercase tracking-wider disabled:opacity-50"
+        >
+          {savingSettings ? "Saving Settings..." : "Save Settings"}
+        </button>
       </div>
 
       {/* 1. HERO SECTION */}
@@ -97,7 +196,7 @@ export default function HomeEditor() {
               type="text"
               value={data.heroHeading}
               onChange={(e) => setData({ ...data, heroHeading: e.target.value })}
-              className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm"
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm bg-white text-brand-dark"
             />
           </div>
           <div>
@@ -106,7 +205,7 @@ export default function HomeEditor() {
               type="text"
               value={data.heroSubheading}
               onChange={(e) => setData({ ...data, heroSubheading: e.target.value })}
-              className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm"
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm bg-white text-brand-dark"
             />
           </div>
         </div>
@@ -117,7 +216,7 @@ export default function HomeEditor() {
             rows={3}
             value={data.heroBody}
             onChange={(e) => setData({ ...data, heroBody: e.target.value })}
-            className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm"
+            className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm bg-white text-brand-dark"
           />
         </div>
 
@@ -127,7 +226,7 @@ export default function HomeEditor() {
             type="text"
             value={data.heroBg}
             onChange={(e) => setData({ ...data, heroBg: e.target.value })}
-            className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm mb-2"
+            className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm bg-white text-brand-dark mb-2"
           />
           {data.heroBg && (
             <div className="relative w-full h-40 rounded border overflow-hidden mt-2 bg-gray-50">
@@ -140,14 +239,14 @@ export default function HomeEditor() {
 
       {/* 2. FEATURE CARDS */}
       <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm space-y-6">
-        <h2 className="text-lg font-bold text-brand-dark border-b pb-2">2. Feature Cards (3 Cards)</h2>
+        <h2 className="text-lg font-bold text-brand-dark border-b pb-2">2. Feature Section Content (3 Alternating Blocks)</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {data.features.map((feature, index) => (
             <div key={index} className="p-4 bg-brand-light rounded border border-gray-100 space-y-3">
-              <span className="text-xs font-bold text-brand-green">Card {index + 1}</span>
+              <span className="text-xs font-bold text-brand-green">Block {index + 1}</span>
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">Title</label>
+                <label className="block text-xs font-semibold text-gray-700 mb-1">Heading</label>
                 <input
                   type="text"
                   value={feature.title}
@@ -156,7 +255,7 @@ export default function HomeEditor() {
                     newFeatures[index] = { ...newFeatures[index], title: e.target.value };
                     setData({ ...data, features: newFeatures });
                   }}
-                  className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-xs bg-white"
+                  className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-xs bg-white text-brand-dark"
                 />
               </div>
               <div>
@@ -169,7 +268,7 @@ export default function HomeEditor() {
                     newFeatures[index] = { ...newFeatures[index], description: e.target.value };
                     setData({ ...data, features: newFeatures });
                   }}
-                  className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-xs bg-white"
+                  className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-xs bg-white text-brand-dark"
                 />
               </div>
             </div>
@@ -187,7 +286,7 @@ export default function HomeEditor() {
             type="text"
             value={data.aboutHeading}
             onChange={(e) => setData({ ...data, aboutHeading: e.target.value })}
-            className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm"
+            className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm bg-white text-brand-dark"
           />
         </div>
 
@@ -197,7 +296,7 @@ export default function HomeEditor() {
             rows={4}
             value={data.aboutBody}
             onChange={(e) => setData({ ...data, aboutBody: e.target.value })}
-            className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm"
+            className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm bg-white text-brand-dark"
           />
         </div>
 
@@ -207,7 +306,7 @@ export default function HomeEditor() {
             type="text"
             value={data.aboutImg}
             onChange={(e) => setData({ ...data, aboutImg: e.target.value })}
-            className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm mb-2"
+            className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm bg-white text-brand-dark mb-2"
           />
           {data.aboutImg && (
             <div className="relative w-48 h-32 rounded border overflow-hidden mt-2 bg-gray-50">
@@ -236,7 +335,7 @@ export default function HomeEditor() {
                     newStats[index] = { ...newStats[index], number: e.target.value };
                     setData({ ...data, stats: newStats });
                   }}
-                  className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm bg-white font-bold"
+                  className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm bg-white text-brand-dark font-bold"
                 />
               </div>
               <div>
@@ -249,7 +348,7 @@ export default function HomeEditor() {
                     newStats[index] = { ...newStats[index], label: e.target.value };
                     setData({ ...data, stats: newStats });
                   }}
-                  className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm bg-white"
+                  className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm bg-white text-brand-dark"
                 />
               </div>
             </div>
@@ -276,7 +375,7 @@ export default function HomeEditor() {
                       newPreviews[index] = { ...newPreviews[index], title: e.target.value };
                       setData({ ...data, productsPreview: newPreviews });
                     }}
-                    className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm bg-white"
+                    className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm bg-white text-brand-dark"
                   />
                 </div>
                 <div>
@@ -289,7 +388,7 @@ export default function HomeEditor() {
                       newPreviews[index] = { ...newPreviews[index], description: e.target.value };
                       setData({ ...data, productsPreview: newPreviews });
                     }}
-                    className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm bg-white"
+                    className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm bg-white text-brand-dark"
                   />
                 </div>
                 <div>
@@ -302,7 +401,7 @@ export default function HomeEditor() {
                       newPreviews[index] = { ...newPreviews[index], image: e.target.value };
                       setData({ ...data, productsPreview: newPreviews });
                     }}
-                    className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm bg-white"
+                    className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm bg-white text-brand-dark"
                   />
                 </div>
               </div>
@@ -323,9 +422,9 @@ export default function HomeEditor() {
       <button
         onClick={handleSave}
         disabled={saving}
-        className="w-full md:w-auto px-8 py-3 bg-brand-green hover:bg-brand-green/90 text-white font-bold rounded shadow transition-all duration-200 min-h-[44px] flex items-center justify-center text-sm uppercase tracking-wider disabled:opacity-50"
+        className="w-full md:w-auto px-8 py-3 bg-[#1B5E20] hover:bg-brand-green/90 text-white font-bold rounded shadow transition-all duration-200 min-h-[44px] flex items-center justify-center text-sm uppercase tracking-wider disabled:opacity-50"
       >
-        {saving ? "Saving Changes..." : "Save Changes"}
+        {saving ? "Saving Content..." : "Save Homepage Content"}
       </button>
     </div>
   );

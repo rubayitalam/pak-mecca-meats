@@ -57,7 +57,7 @@ export default function Contact() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-white">
       {/* Hero */}
       <HeroSection
         heading="Contact Us"
@@ -66,21 +66,25 @@ export default function Contact() {
       />
 
       {/* Main Section */}
-      <section className="py-16 md:py-24 bg-white">
+      <section className="py-20 lg:py-32 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 xl:px-24">
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
 
-            {/* Contact Form */}
-            <div className="bg-brand-light p-6 sm:p-10 rounded-lg shadow-sm border border-gray-100">
-              <h2 className="text-2xl font-bold text-brand-dark mb-2">Send an Inquiry</h2>
-              <p className="text-gray-600 text-sm mb-6">
-                Fill out the form below and a representative will get back to you shortly.
-              </p>
+            {/* Contact Form (Clean minimal form, no card wrapper) */}
+            <div className="flex flex-col space-y-8">
+              <div>
+                <span className="text-[#C8A400] text-xs font-bold uppercase tracking-widest block mb-2">
+                  Inquiries
+                </span>
+                <h2 className="text-3xl font-light text-brand-dark uppercase tracking-wider">
+                  Send an Inquiry
+                </h2>
+              </div>
 
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <form onSubmit={handleSubmit} className="space-y-8">
                 <div>
-                  <label htmlFor="fullName" className="block text-sm font-semibold text-brand-dark mb-1.5">
+                  <label htmlFor="fullName" className="block text-xs font-bold uppercase tracking-widest text-[#C8A400] mb-1">
                     Full Name
                   </label>
                   <input
@@ -88,14 +92,14 @@ export default function Contact() {
                     id="fullName"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full px-4 py-3 rounded border border-gray-200 focus:outline-none focus:border-brand-green bg-white text-brand-dark text-sm min-h-[44px]"
-                    placeholder="John Doe"
+                    className="w-full border-b border-gray-300 focus:border-[#1B5E20] focus:outline-none bg-transparent py-3 text-sm text-brand-dark transition-colors duration-200"
+                    placeholder="Enter your name"
                     required
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="emailAddress" className="block text-sm font-semibold text-brand-dark mb-1.5">
+                  <label htmlFor="emailAddress" className="block text-xs font-bold uppercase tracking-widest text-[#C8A400] mb-1">
                     Email Address
                   </label>
                   <input
@@ -103,14 +107,14 @@ export default function Contact() {
                     id="emailAddress"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-4 py-3 rounded border border-gray-200 focus:outline-none focus:border-brand-green bg-white text-brand-dark text-sm min-h-[44px]"
-                    placeholder="john@example.com"
+                    className="w-full border-b border-gray-300 focus:border-[#1B5E20] focus:outline-none bg-transparent py-3 text-sm text-brand-dark transition-colors duration-200"
+                    placeholder="name@domain.com"
                     required
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="subject" className="block text-sm font-semibold text-brand-dark mb-1.5">
+                  <label htmlFor="subject" className="block text-xs font-bold uppercase tracking-widest text-[#C8A400] mb-1">
                     Subject
                   </label>
                   <input
@@ -118,14 +122,14 @@ export default function Contact() {
                     id="subject"
                     value={subject}
                     onChange={(e) => setSubject(e.target.value)}
-                    className="w-full px-4 py-3 rounded border border-gray-200 focus:outline-none focus:border-brand-green bg-white text-brand-dark text-sm min-h-[44px]"
-                    placeholder="Product Query, Partnership, etc."
+                    className="w-full border-b border-gray-300 focus:border-[#1B5E20] focus:outline-none bg-transparent py-3 text-sm text-brand-dark transition-colors duration-200"
+                    placeholder="Query type or topic"
                     required
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block text-sm font-semibold text-brand-dark mb-1.5">
+                  <label htmlFor="message" className="block text-xs font-bold uppercase tracking-widest text-[#C8A400] mb-1">
                     Message
                   </label>
                   <textarea
@@ -133,8 +137,8 @@ export default function Contact() {
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     rows={5}
-                    className="w-full px-4 py-3 rounded border border-gray-200 focus:outline-none focus:border-brand-green bg-white text-brand-dark text-sm min-h-[100px]"
-                    placeholder="How can we help you?"
+                    className="w-full border-b border-gray-300 focus:border-[#1B5E20] focus:outline-none bg-transparent py-3 text-sm text-brand-dark transition-colors duration-200 resize-none"
+                    placeholder="How can our team support you?"
                     required
                   />
                 </div>
@@ -142,91 +146,81 @@ export default function Contact() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full bg-brand-green hover:bg-brand-green/90 text-white font-bold py-3 rounded shadow hover:shadow-md transition-all duration-200 min-h-[44px] flex items-center justify-center gap-2 text-sm uppercase tracking-wider disabled:opacity-50"
+                  className="w-full bg-[#1A1A1A] hover:bg-[#C8A400] text-white font-semibold py-3 tracking-widest text-xs uppercase transition-colors duration-300 min-h-[44px] flex items-center justify-center gap-2 disabled:opacity-50"
                 >
-                  <Send className="w-4 h-4" />
-                  <span>{submitting ? "Sending..." : "Send Message"}</span>
+                  <Send className="w-3.5 h-3.5" />
+                  <span>{submitting ? "Sending..." : "Submit Inquiry"}</span>
                 </button>
               </form>
             </div>
 
-            {/* Contact Details & Info */}
-            <div className="flex flex-col space-y-8 lg:pt-4">
-
+            {/* Contact Details & Info (Clean flat layout, no card wrapper) */}
+            <div className="flex flex-col space-y-12">
               <div>
-                <span className="text-brand-gold text-xs font-bold uppercase tracking-wider block mb-1">
-                  Connect
+                <span className="text-[#C8A400] text-xs font-bold uppercase tracking-widest block mb-2">
+                  Find Us
                 </span>
-                <h2 className="text-3xl font-extrabold text-brand-dark tracking-tight">
+                <h2 className="text-3xl font-light text-brand-dark uppercase tracking-wider">
                   Contact Details
                 </h2>
-                <div className="h-1 w-16 bg-brand-green mt-3 mb-6" />
               </div>
 
-              <div className="space-y-6">
-                <div className="flex items-start space-x-4">
-                  <div className="w-10 h-10 rounded-full bg-brand-green/10 flex items-center justify-center text-brand-green shrink-0 mt-0.5">
-                    <MapPin className="w-5 h-5" />
-                  </div>
+              <div className="space-y-8">
+                <div className="flex items-start space-x-4 pl-1">
+                  <MapPin className="w-5 h-5 text-[#C8A400] shrink-0 mt-0.5" />
                   <div>
-                    <h3 className="font-bold text-brand-dark text-base uppercase tracking-wider mb-1">
+                    <h3 className="font-bold text-brand-dark text-xs uppercase tracking-widest mb-1.5">
                       Our Head Office
                     </h3>
-                    <p className="text-gray-600 text-sm leading-relaxed">{info.address}</p>
+                    <p className="text-gray-600 text-sm font-light leading-relaxed">{info.address}</p>
                   </div>
                 </div>
 
-                <div className="flex items-start space-x-4">
-                  <div className="w-10 h-10 rounded-full bg-brand-green/10 flex items-center justify-center text-brand-green shrink-0 mt-0.5">
-                    <Phone className="w-5 h-5" />
-                  </div>
+                <div className="flex items-start space-x-4 pl-1">
+                  <Phone className="w-5 h-5 text-[#C8A400] shrink-0 mt-0.5" />
                   <div>
-                    <h3 className="font-bold text-brand-dark text-base uppercase tracking-wider mb-1">
+                    <h3 className="font-bold text-brand-dark text-xs uppercase tracking-widest mb-1.5">
                       Call Us Directly
                     </h3>
                     <a
                       href={`tel:${info.phone.replace(/\s+/g, "")}`}
-                      className="text-brand-green font-semibold text-sm hover:underline"
+                      className="text-gray-600 text-sm font-light hover:text-[#C8A400] transition-colors"
                     >
                       {info.phone}
                     </a>
                   </div>
                 </div>
 
-                <div className="flex items-start space-x-4">
-                  <div className="w-10 h-10 rounded-full bg-brand-green/10 flex items-center justify-center text-brand-green shrink-0 mt-0.5">
-                    <Mail className="w-5 h-5" />
-                  </div>
+                <div className="flex items-start space-x-4 pl-1">
+                  <Mail className="w-5 h-5 text-[#C8A400] shrink-0 mt-0.5" />
                   <div>
-                    <h3 className="font-bold text-brand-dark text-base uppercase tracking-wider mb-1">
+                    <h3 className="font-bold text-brand-dark text-xs uppercase tracking-widest mb-1.5">
                       Email Inquiries
                     </h3>
                     <a
                       href={`mailto:${info.email}`}
-                      className="text-brand-green font-semibold text-sm hover:underline"
+                      className="text-gray-600 text-sm font-light hover:text-[#C8A400] transition-colors"
                     >
                       {info.email}
                     </a>
                   </div>
                 </div>
 
-                <div className="flex items-start space-x-4">
-                  <div className="w-10 h-10 rounded-full bg-brand-green/10 flex items-center justify-center text-brand-green shrink-0 mt-0.5">
-                    <Clock className="w-5 h-5" />
-                  </div>
+                <div className="flex items-start space-x-4 pl-1">
+                  <Clock className="w-5 h-5 text-[#C8A400] shrink-0 mt-0.5" />
                   <div>
-                    <h3 className="font-bold text-brand-dark text-base uppercase tracking-wider mb-1">
+                    <h3 className="font-bold text-brand-dark text-xs uppercase tracking-widest mb-1.5">
                       Opening Hours
                     </h3>
-                    <p className="text-gray-600 text-sm">{info.hours}</p>
-                    <p className="text-gray-600 text-sm">{info.saturdayHours}</p>
-                    <p className="text-gray-400 text-xs mt-1">Sunday: Closed</p>
+                    <p className="text-gray-600 text-sm font-light">{info.hours}</p>
+                    <p className="text-gray-600 text-sm font-light">{info.saturdayHours}</p>
+                    <p className="text-gray-400 text-xs mt-1 font-light">Sunday: Closed</p>
                   </div>
                 </div>
               </div>
 
               {/* Google Maps Embed — Birmingham B5 7EJ */}
-              <div className="w-full rounded-lg overflow-hidden border border-gray-100 shadow-sm">
+              <div className="w-full overflow-hidden border-t border-[#C8A400]/20 pt-6">
                 <iframe
                   title="Pak Mecca Meats Location — Bishop Street Birmingham"
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2430.3444458315185!2d-1.8993203842013893!3d52.47290077980562!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4870bc84d1a556fb%3A0xe5102553753fc333!2sBishop%20St%2C%20Birmingham%20B5%207EJ!5e0!3m2!1sen!2suk!4v1680000000000!5m2!1sen!2suk"
@@ -236,7 +230,7 @@ export default function Contact() {
                   allowFullScreen={false}
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  className="w-full h-[300px] lg:h-[350px]"
+                  className="w-full h-[300px]"
                 />
               </div>
 

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import HeroSection from "@/components/HeroSection";
 import ContentBlock from "@/components/ContentBlock";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { getPageContent } from "@/lib/firestore";
 import { AboutContent } from "@/types/content";
 
@@ -12,7 +12,7 @@ const defaults: AboutContent = {
   heroSubheading: "A Tradition of Quality Since 1980",
   heroBg: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=1600",
   whoWeAreBody:
-    "Pak Mecca Meats Ltd is a Birmingham-based supplier of premium British lamb and mutton carcasses, founded in 1980. As a family-owned business built on customer-centric values, we have grown into a powerhouse of the UK halal meat industry. Our specialist facilities in Birmingham enable us to process 15,000–20,000 carcasses per week. With over 150 dedicated colleagues working in our plant, we serve communities in the UK, mainland Europe, the Middle East and beyond.",
+    "Pak Mecca Meats Ltd is a Birmingham-based supplier of premium British halal lamb and mutton carcasses, founded in 1980. As a family-owned business built on customer-centric values, we have grown into a powerhouse of the UK halal meat industry. Our specialist facilities in Birmingham enable us to process 15,000–20,000 carcasses per week. With over 150 dedicated colleagues working in our plant, we serve communities in the UK, mainland Europe, the Middle East and beyond.",
   whoWeAreImg: "https://images.unsplash.com/photo-1551782450-17144efb9c50?w=800",
   historyImg: "https://images.unsplash.com/photo-1528607929212-2636ec44253e?w=800",
   timeline: [
@@ -106,6 +106,7 @@ const defaults: AboutContent = {
 
 export default function About() {
   const [content, setContent] = useState<AboutContent>(defaults);
+  const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
     async function loadContent() {
@@ -129,7 +130,7 @@ export default function About() {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-white">
       {/* Hero */}
       <HeroSection
         heading={content.heroHeading}
@@ -137,64 +138,63 @@ export default function About() {
         bgImage={content.heroBg}
       />
 
-      {/* Who We Are: Text left, Image right on desktop */}
+      {/* Who We Are */}
       <ContentBlock
         heading="Who We Are"
         body={content.whoWeAreBody}
         image={content.whoWeAreImg}
+        label="ABOUT US"
+        bgColor="bg-[#FAFAFA]"
       />
 
       {/* Our History Timeline */}
-      <section className="py-16 md:py-24 bg-brand-light overflow-hidden">
+      <section className="py-20 lg:py-32 bg-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 xl:px-24">
-          <div className="text-center max-w-2xl mx-auto mb-12 lg:mb-16">
-            <span className="text-brand-gold text-sm font-bold uppercase tracking-wider">
+          <div className="max-w-2xl mb-16 lg:mb-24">
+            <span className="text-[#C8A400] text-xs font-bold uppercase tracking-widest block mb-2">
               Our Journey
             </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-brand-dark mt-2">
+            <h2 className="text-3xl sm:text-4xl font-light text-brand-dark tracking-wide">
               Our History
             </h2>
-            <div className="h-1 w-20 bg-brand-green mx-auto mt-4" />
           </div>
 
-          {/* Vertical Timeline (mobile) → Alternating (desktop) */}
           <div className="relative">
-            {/* Vertical line (desktop only) */}
-            <div className="hidden lg:block absolute left-1/2 transform -translate-x-1/2 w-0.5 bg-brand-green/20 top-0 bottom-0" />
+            {/* Center Timeline Line (Desktop Only) */}
+            <div className="hidden lg:block absolute left-1/2 transform -translate-x-1/2 w-[1px] bg-[#C8A400]/30 top-0 bottom-0" />
 
-            <div className="space-y-8 lg:space-y-0">
+            <div className="space-y-12 lg:space-y-24">
               {content.timeline.map((milestone, index) => {
                 const isLeft = index % 2 === 0;
                 return (
                   <motion.div
                     key={index}
-                    initial={{ opacity: 0, x: isLeft ? -30 : 30 }}
+                    initial={{
+                      opacity: 0,
+                      x: shouldReduceMotion ? 0 : isLeft ? -40 : 40,
+                    }}
                     whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true, margin: "-80px" }}
-                    transition={{ duration: 0.5, delay: index * 0.08 }}
-                    className={`relative flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-0 lg:mb-12 ${
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 0.6, ease: "easeOut" }}
+                    className={`relative flex flex-col lg:flex-row lg:items-center ${
                       isLeft ? "lg:flex-row" : "lg:flex-row-reverse"
                     }`}
                   >
-                    {/* Content card — takes up 45% width on desktop */}
-                    <div
-                      className={`lg:w-[45%] bg-white rounded-lg p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300 ${
-                        isLeft ? "lg:mr-auto lg:pr-12" : "lg:ml-auto lg:pl-12"
-                      }`}
-                    >
-                      <span className="inline-block bg-brand-green text-white text-xs font-black px-3 py-1 rounded-full mb-3 tracking-wider">
+                    {/* Content text */}
+                    <div className="lg:w-[45%] flex flex-col space-y-3 lg:px-8">
+                      <span className="text-[#C8A400] text-lg font-bold tracking-wide">
                         {milestone.year}
                       </span>
-                      <h3 className="text-lg font-bold text-brand-dark mb-2">
+                      <h3 className="text-xl font-light text-brand-dark uppercase tracking-wider">
                         {milestone.title}
                       </h3>
-                      <p className="text-gray-600 text-sm leading-relaxed">
+                      <p className="text-gray-600 text-sm leading-relaxed font-light">
                         {milestone.body}
                       </p>
                     </div>
 
-                    {/* Center dot on desktop */}
-                    <div className="hidden lg:flex absolute left-1/2 transform -translate-x-1/2 w-4 h-4 rounded-full bg-brand-gold border-4 border-white shadow-md z-10" />
+                    {/* Desktop Center Gold Dot */}
+                    <div className="hidden lg:flex absolute left-1/2 transform -translate-x-1/2 w-3 h-3 rounded-full bg-[#C8A400] border-2 border-white shadow-sm z-10" />
                   </motion.div>
                 );
               })}
@@ -203,37 +203,32 @@ export default function About() {
         </div>
       </section>
 
-      {/* Core Values Section — 6 cards */}
-      <section className="py-16 md:py-24 bg-white">
+      {/* Core Values Section — Simple text list with left border bullet lines */}
+      <section className="py-20 lg:py-32 bg-[#FAFAFA] border-t border-[#C8A400]/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 xl:px-24">
-          <div className="text-center max-w-2xl mx-auto mb-12 lg:mb-16">
-            <span className="text-brand-gold text-sm font-bold uppercase tracking-wider">
+          <div className="max-w-2xl mb-16">
+            <span className="text-[#C8A400] text-xs font-bold uppercase tracking-widest block mb-2">
               What We Stand For
             </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-brand-dark mt-2">
+            <h2 className="text-3xl sm:text-4xl font-light text-brand-dark tracking-wide">
               Our Core Values
             </h2>
-            <div className="h-1 w-20 bg-brand-green mx-auto mt-4" />
           </div>
 
-          {/* 1-col mobile → 2-col tablet → 3-col desktop */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
             {content.values.map((value, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.5, delay: (index % 3) * 0.1 }}
-                className="bg-brand-light p-6 rounded-lg border-t-4 border-brand-green shadow-sm hover:shadow-md transition-shadow duration-300"
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: shouldReduceMotion ? 0 : (index % 3) * 0.1 }}
+                className="pl-6 border-l-2 border-[#C8A400] flex flex-col space-y-3"
               >
-                <span className="text-brand-gold text-2xl font-black mb-3 block">
-                  0{index + 1}
-                </span>
-                <h3 className="text-lg font-bold text-brand-dark mb-2">
+                <h3 className="text-sm font-bold text-brand-dark uppercase tracking-widest">
                   {value.title}
                 </h3>
-                <p className="text-gray-600 text-sm leading-relaxed">
+                <p className="text-gray-600 text-sm leading-relaxed font-light">
                   {value.description}
                 </p>
               </motion.div>
@@ -242,38 +237,34 @@ export default function About() {
         </div>
       </section>
 
-      {/* Quality Section */}
-      <section className="py-16 md:py-24 bg-brand-green/5 border-t border-brand-green/10">
+      {/* Quality Section — Centered editorial italic blockquote style */}
+      <section className="py-24 lg:py-40 bg-white border-t border-[#C8A400]/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 xl:px-24">
-          <div className="text-center max-w-2xl mx-auto mb-12 lg:mb-16">
-            <span className="text-brand-gold text-sm font-bold uppercase tracking-wider">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <span className="text-[#C8A400] text-xs font-bold uppercase tracking-widest block mb-2">
               Our Standard
             </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-brand-dark mt-2">
+            <h2 className="text-3xl sm:text-4xl font-light text-brand-dark tracking-wide">
               {content.qualityHeading}
             </h2>
-            <div className="h-1 w-20 bg-brand-green mx-auto mt-4" />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="flex flex-col space-y-16 max-w-4xl mx-auto text-center divide-y divide-[#C8A400]/20">
             {content.qualityCards.map((card, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-white p-8 rounded-lg shadow-sm border border-brand-green/10 hover:border-brand-gold hover:shadow-md transition-all duration-300 text-center"
+                transition={{ duration: 0.6 }}
+                className={`flex flex-col items-center ${index > 0 ? "pt-12" : ""}`}
               >
-                <div className="w-12 h-12 rounded-full bg-brand-green flex items-center justify-center mx-auto mb-4">
-                  <span className="text-white font-black text-sm">0{index + 1}</span>
-                </div>
-                <h3 className="text-lg font-bold text-brand-dark mb-3">
-                  {card.title}
-                </h3>
-                <p className="text-gray-600 text-sm leading-relaxed">
-                  {card.description}
-                </p>
+                <span className="text-xs uppercase tracking-widest text-[#C8A400] font-bold mb-4">
+                  0{index + 1}. {card.title}
+                </span>
+                <blockquote className="text-xl sm:text-2xl lg:text-3xl font-light italic text-gray-700 leading-relaxed max-w-3xl">
+                  &ldquo;{card.description}&rdquo;
+                </blockquote>
               </motion.div>
             ))}
           </div>

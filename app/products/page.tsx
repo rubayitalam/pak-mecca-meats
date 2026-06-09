@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import HeroSection from "@/components/HeroSection";
-import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import ProductCard from "@/components/ProductCard";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { getPageContent } from "@/lib/firestore";
 import { ProductsContent } from "@/types/content";
 
@@ -66,6 +66,7 @@ type TabType = "lamb" | "mutton" | "offal" | "skins";
 export default function Products() {
   const [content, setContent] = useState<ProductsContent>(defaults);
   const [activeTab, setActiveTab] = useState<TabType>("lamb");
+  const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
     async function loadContent() {
@@ -100,7 +101,7 @@ export default function Products() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-white">
       {/* Hero */}
       <HeroSection
         heading={content.heroHeading || defaults.heroHeading!}
@@ -109,21 +110,21 @@ export default function Products() {
       />
 
       {/* Tabs Selector & Product Grid */}
-      <section className="py-16 md:py-24 bg-white">
+      <section className="py-20 lg:py-32 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 xl:px-24">
 
-          {/* Navigation Tabs */}
-          <div className="flex justify-start md:justify-center overflow-x-auto pb-4 mb-12 border-b border-gray-100 gap-4 scrollbar-none snap-x snap-mandatory">
+          {/* Navigation Tabs (Thin gold underline indicator) */}
+          <div className="flex justify-start md:justify-center overflow-x-auto pb-px mb-16 border-b border-gray-200 gap-8 scrollbar-none snap-x snap-mandatory">
             {tabs.map((tab) => {
               const isActive = activeTab === tab.id;
               return (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`snap-center shrink-0 px-6 py-3 font-bold rounded text-sm uppercase tracking-wider transition-all duration-300 min-h-[44px] border ${
+                  className={`snap-center shrink-0 pb-4 font-bold text-xs uppercase tracking-widest transition-all duration-300 min-h-[44px] focus:outline-none border-b-2 ${
                     isActive
-                      ? "bg-brand-green text-white border-brand-green shadow-md"
-                      : "bg-white text-brand-green border-brand-green hover:bg-brand-green/5"
+                      ? "border-[#C8A400] text-[#C8A400]"
+                      : "border-transparent text-gray-500 hover:text-brand-dark"
                   }`}
                 >
                   {tab.name}
@@ -137,35 +138,21 @@ export default function Products() {
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeTab}
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
+                exit={{ opacity: 0, y: shouldReduceMotion ? 0 : -15 }}
                 transition={{ duration: 0.3 }}
-                className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
               >
                 {content[activeTab]?.map((item, index) => (
-                  <div
+                  <ProductCard
                     key={index}
-                    className="bg-brand-light rounded-lg border border-gray-100 overflow-hidden flex flex-col hover:shadow-md transition-shadow duration-300"
-                  >
-                    <div className="relative h-48 w-full">
-                      <Image
-                        src={item.image || fallbackImage[activeTab]}
-                        alt={item.name}
-                        fill
-                        sizes="(max-width: 768px) 50vw, 25vw"
-                        className="object-cover"
-                      />
-                    </div>
-                    <div className="p-4 flex-grow flex flex-col">
-                      <h4 className="font-extrabold text-sm text-brand-dark mb-1 uppercase tracking-wide leading-snug">
-                        {item.name}
-                      </h4>
-                      <p className="text-gray-600 text-xs leading-relaxed">
-                        {item.description}
-                      </p>
-                    </div>
-                  </div>
+                    title={item.name}
+                    description={item.description}
+                    image={item.image || fallbackImage[activeTab]}
+                    link="/contact"
+                    btnText="Inquire Now"
+                  />
                 ))}
               </motion.div>
             </AnimatePresence>

@@ -107,28 +107,49 @@ export default function HeroSection({
           }`}
         />
         {/* Video Background */}
-        {videoUrl && (
-  <video
-    key={videoUrl}
-    autoPlay
-    muted
-    loop
-    playsInline
-    preload="auto"
-    style={{ 
-      position: 'absolute',
-      inset: 0,
-      width: '100%',
-      height: '100%',
-      objectFit: 'cover'
-    }}
-    className={`transition-opacity duration-1000 ease-in-out ${
-      showVideo ? "opacity-100" : "opacity-0"
-    }`}
-  >
-    <source src={videoUrl} type="video/mp4" />
-  </video>
-)}
+         {videoUrl && (
+           <>
+             {videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be') ? (
+               <iframe
+                 key={videoUrl}
+                 src={`${videoUrl}?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&playlist=${videoUrl.split('/').pop()}`}
+                 allow="autoplay; fullscreen"
+                 style={{
+                   position: 'absolute',
+                   inset: 0,
+                   width: '100%',
+                   height: '100%',
+                   border: 'none',
+                   pointerEvents: 'none'
+                 }}
+                 className={`transition-opacity duration-1000 ${
+                   showVideo ? "opacity-100" : "opacity-0"
+                 }`}
+               />
+             ) : (
+               <video
+                 key={videoUrl}
+                 autoPlay
+                 muted
+                 loop
+                 playsInline
+                 preload="auto"
+                 style={{
+                   position: 'absolute',
+                   inset: 0,
+                   width: '100%',
+                   height: '100%',
+                   objectFit: 'cover'
+                 }}
+                 className={`transition-opacity duration-1000 ${
+                   showVideo ? "opacity-100" : "opacity-0"
+                 }`}
+               >
+                 <source src={videoUrl} type="video/mp4" />
+               </video>
+             )}
+           </>
+         )}
         {/* Dark Overlay */}
         <div
           className={`absolute inset-0 transition-colors duration-1000 ease-in-out ${

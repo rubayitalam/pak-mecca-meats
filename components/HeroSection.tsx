@@ -35,7 +35,7 @@ export default function HeroSection({
   const [showVideo, setShowVideo] = useState(false);
   useEffect(() => {
     if (videoUrl) {
-      const timer = setTimeout(() => setShowVideo(true), 4000);
+      const timer = setTimeout(() => setShowVideo(true), 2500);
       return () => clearTimeout(timer);
     }
   }, [videoUrl]);
@@ -119,8 +119,12 @@ export default function HeroSection({
             }`}
           />
         )}
-        {/* bg-black/60 Dark Overlay */}
-        <div className="absolute inset-0 bg-black/60" />
+        {/* Dark Overlay */}
+        <div
+          className={`absolute inset-0 transition-colors duration-1000 ease-in-out ${
+            showVideo ? "bg-black/5" : "bg-black/30"
+          }`}
+        />
       </div>
 
       {/* Hero Content (Centered vertically & horizontally) */}
@@ -128,7 +132,7 @@ export default function HeroSection({
         {isHome ? (
           <>
             {/* 1. WORDS DISPLAY: Stacked at once, visible simultaneously, white, text-6xl md:text-8xl, tracking-widest */}
-            <div className="flex flex-col space-y-2 select-none">
+            <div className={`flex flex-col space-y-2 select-none transition-opacity duration-1000 ${showVideo ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
               <motion.span
                 custom={0}
                 variants={wordVariants}

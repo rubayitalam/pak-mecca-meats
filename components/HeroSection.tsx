@@ -32,7 +32,7 @@ export default function HeroSection({
   const isHome = pathname === "/";
   const [showVideo, setShowVideo] = useState(false);
   useEffect(() => {
-    if (videoUrl && window.innerWidth >= 768) {
+    if (videoUrl) {
       const timer = setTimeout(() => setShowVideo(true), 0);
       return () => clearTimeout(timer);
     }

@@ -103,32 +103,38 @@ export default function HeroSection({
           priority
           sizes="100vw"
           className={`object-cover transition-opacity duration-1000 ease-in-out ${
-            showVideo ? "opacity-0" : "opacity-50"
+            showVideo ? "opacity-0" : "opacity-100"
           }`}
         />
         {/* Video Background */}
         {videoUrl && (
-          <video
-            src={videoUrl}
-            autoPlay
-            muted
-            loop
-            playsInline
-            className={`absolute inset-0 object-cover transition-opacity duration-1000 ease-in-out ${
-              showVideo ? "opacity-50" : "opacity-0"
-            }`}
-          />
-        )}
+  <video
+    key={videoUrl}
+    autoPlay
+    muted
+    loop
+    playsInline
+    webkit-playsinline
+    preload="auto"
+    className={`absolute inset-0 w-full h-full object-cover 
+      transition-opacity duration-1000 ease-in-out ${
+      showVideo ? "opacity-100" : "opacity-0"
+    }`}
+  >
+    <source src={videoUrl} type="video/mp4" />
+  </video>
+)}
         {/* Dark Overlay */}
         <div
           className={`absolute inset-0 transition-colors duration-1000 ease-in-out ${
-            showVideo ? "bg-black/5" : "bg-black/30"
+            showVideo ? "bg-black/0" : "bg-black/30"
           }`}
         />
       </div>
 
       {/* Hero Content (Centered vertically & horizontally) */}
       <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-8 flex flex-col items-center justify-center text-center h-full">
+
         {isHome ? (
           <>
             {/* 1. WORDS DISPLAY: Stacked at once, visible simultaneously, white, text-6xl md:text-8xl, tracking-widest */}

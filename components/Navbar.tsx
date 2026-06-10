@@ -76,11 +76,7 @@ export default function Navbar() {
   };
 
   return (
-    <header
-      className={`fixed top-0 left-0 w-full z-50 bg-[#1A1A1A] border-b border-[#C8A400]/30 transition-shadow duration-300 ${
-        scrolled ? "shadow-lg shadow-black/20" : ""
-      }`}
-    >
+    <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-[#1A1A1A] shadow-lg' : 'bg-transparent'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 xl:px-24 h-20 md:h-24 flex items-center relative justify-between">
         {/* Left Side: MENU text/button */}
         <div className="flex-1 flex justify-start z-50">

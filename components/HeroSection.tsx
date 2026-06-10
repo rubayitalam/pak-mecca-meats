@@ -114,10 +114,15 @@ export default function HeroSection({
     muted
     loop
     playsInline
-    webkit-playsinline
     preload="auto"
-    className={`absolute inset-0 w-full h-full object-cover 
-      transition-opacity duration-1000 ease-in-out ${
+    style={{ 
+      position: 'absolute',
+      inset: 0,
+      width: '100%',
+      height: '100%',
+      objectFit: 'cover'
+    }}
+    className={`transition-opacity duration-1000 ease-in-out ${
       showVideo ? "opacity-100" : "opacity-0"
     }`}
   >

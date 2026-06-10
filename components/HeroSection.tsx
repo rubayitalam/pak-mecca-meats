@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useState } from "react";
 
 interface HeroSectionProps {
   heading: string;
@@ -14,6 +15,7 @@ interface HeroSectionProps {
   primaryBtnLink?: string;
   secondaryBtnText?: string;
   secondaryBtnLink?: string;
+  videoUrl?: string;
 }
 
 export default function HeroSection({
@@ -25,10 +27,18 @@ export default function HeroSection({
   primaryBtnLink,
   secondaryBtnText,
   secondaryBtnLink,
+  videoUrl,
 }: HeroSectionProps) {
   const pathname = usePathname();
   const shouldReduceMotion = useReducedMotion();
   const isHome = pathname === "/";
+  const [showVideo, setShowVideo] = useState(false);
+  useEffect(() => {
+    if (videoUrl) {
+      const timer = setTimeout(() => setShowVideo(true), 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [videoUrl]);
 
   const fadeUpVariants = {
     hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 35 },
@@ -92,8 +102,23 @@ export default function HeroSection({
           fill
           priority
           sizes="100vw"
-          className="object-cover opacity-50"
+          className={`object-cover transition-opacity duration-1000 ease-in-out ${
+            showVideo ? "opacity-0" : "opacity-50"
+          }`}
         />
+        {/* Video Background */}
+        {videoUrl && (
+          <video
+            src={videoUrl}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className={`absolute inset-0 object-cover transition-opacity duration-1000 ease-in-out ${
+              showVideo ? "opacity-50" : "opacity-0"
+            }`}
+          />
+        )}
         {/* bg-black/60 Dark Overlay */}
         <div className="absolute inset-0 bg-black/60" />
       </div>

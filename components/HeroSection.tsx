@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, useReducedMotion } from "framer-motion";
@@ -22,7 +21,6 @@ export default function HeroSection({
   heading,
   subheading,
   bodyText,
-  bgImage,
   primaryBtnText,
   primaryBtnLink,
   secondaryBtnText,
@@ -35,7 +33,7 @@ export default function HeroSection({
   const [showVideo, setShowVideo] = useState(false);
   useEffect(() => {
     if (videoUrl && window.innerWidth >= 768) {
-      const timer = setTimeout(() => setShowVideo(true), 2500);
+      const timer = setTimeout(() => setShowVideo(true), 0);
       return () => clearTimeout(timer);
     }
   }, [videoUrl]);
@@ -94,18 +92,8 @@ export default function HeroSection({
 
   return (
     <section className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-[#1A1A1A]">
-      {/* Background Image */}
+      {/* Background Layers */}
       <div className="absolute inset-0 z-0">
-        <Image
-          src={bgImage}
-          alt={heading}
-          fill
-          priority
-          sizes="100vw"
-          className={`object-cover transition-opacity duration-1000 ease-in-out ${
-            showVideo ? "opacity-0" : "opacity-100"
-          }`}
-        />
         {/* Video Background */}
          {videoUrl && (
            <video

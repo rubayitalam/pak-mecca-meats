@@ -9,7 +9,7 @@ import { AssuranceContent } from "@/types/content";
 const defaults: AssuranceContent = {
   heroHeading: "Our Assurances",
   heroSubheading: "Quality & Safety You Can Trust",
-  heroBg: "https://images.unsplash.com/photo-1584475784921-d9dbfd9d17ca?w=1600",
+  heroBg: "https://images.unsplash.com/photo-1615937662601-4724eceda00f?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YnV0Y2hlcnxlbnwwfHwwfHx8MA%3D%3D",
   sections: [
     {
       heading: "HMC Halal Certified",

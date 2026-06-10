@@ -5,7 +5,24 @@ import { getPageContent, savePageContent } from "@/lib/firestore";
 import { HomeContent } from "@/types/content";
 import toast from "react-hot-toast";
 
-const defaults: HomeContent = {
+interface ExtendedHomeContent extends HomeContent {
+  heroVideo?: {
+    heading: string;
+    subtext: string;
+    buttonText: string;
+    buttonLink: string;
+    videoUrl: string;
+  };
+}
+
+const defaults: ExtendedHomeContent = {
+  heroVideo: {
+    heading: "See How We Work",
+    subtext: "From farm to plate — watch how Pak Mecca Meats delivers premium halal quality every single day.",
+    buttonText: "Learn More",
+    buttonLink: "/about",
+    videoUrl: "",
+  },
   heroHeading: "Premium Halal Lamb & Mutton",
   heroSubheading: "Trusted Worldwide Since 1980",
   heroBody:
@@ -40,7 +57,7 @@ interface SiteSettingsState {
 }
 
 export default function HomeEditor() {
-  const [data, setData] = useState<HomeContent>(defaults);
+  const [data, setData] = useState<ExtendedHomeContent>(defaults);
   const [settings, setSettings] = useState<SiteSettingsState>({
     logoUrl: "/logo.png",
     siteName: "Pak Mecca Meats",
@@ -67,6 +84,13 @@ export default function HomeEditor() {
           aboutImg: dbData.aboutImg || defaults.aboutImg,
           stats: dbData.stats || defaults.stats,
           productsPreview: dbData.productsPreview || defaults.productsPreview,
+          heroVideo: dbData.heroVideo ? {
+            heading: dbData.heroVideo.heading ?? defaults.heroVideo?.heading,
+            subtext: dbData.heroVideo.subtext ?? defaults.heroVideo?.subtext,
+            buttonText: dbData.heroVideo.buttonText ?? defaults.heroVideo?.buttonText,
+            buttonLink: dbData.heroVideo.buttonLink ?? defaults.heroVideo?.buttonLink,
+            videoUrl: dbData.heroVideo.videoUrl ?? defaults.heroVideo?.videoUrl,
+          } : defaults.heroVideo,
         });
       }
 
@@ -94,6 +118,20 @@ export default function HomeEditor() {
       toast.error("Failed to save changes. Check permissions.");
     }
     setSaving(false);
+  };
+
+  const updateHeroVideo = (field: string, value: string) => {
+    setData((prev) => ({
+      ...prev,
+      heroVideo: {
+        heading: prev.heroVideo?.heading ?? defaults.heroVideo?.heading ?? "",
+        subtext: prev.heroVideo?.subtext ?? defaults.heroVideo?.subtext ?? "",
+        buttonText: prev.heroVideo?.buttonText ?? defaults.heroVideo?.buttonText ?? "",
+        buttonLink: prev.heroVideo?.buttonLink ?? defaults.heroVideo?.buttonLink ?? "",
+        videoUrl: prev.heroVideo?.videoUrl ?? defaults.heroVideo?.videoUrl ?? "",
+        [field]: value,
+      },
+    }));
   };
 
   const handleSaveSettings = async () => {
@@ -237,9 +275,85 @@ export default function HomeEditor() {
         </div>
       </div>
 
-      {/* 2. FEATURE CARDS */}
+      {/* 2. HERO SECTION 2 (VIDEO) */}
+      <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm space-y-4">
+        <h2 className="text-lg font-bold text-brand-dark border-b pb-2">2. Hero Section 2 (Video)</h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Section Heading</label>
+            <input
+              type="text"
+              value={data.heroVideo?.heading ?? ""}
+              onChange={(e) => updateHeroVideo("heading", e.target.value)}
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm bg-white text-brand-dark"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Button Text</label>
+            <input
+              type="text"
+              value={data.heroVideo?.buttonText ?? ""}
+              onChange={(e) => updateHeroVideo("buttonText", e.target.value)}
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm bg-white text-brand-dark"
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Button Link</label>
+            <input
+              type="text"
+              value={data.heroVideo?.buttonLink ?? ""}
+              onChange={(e) => updateHeroVideo("buttonLink", e.target.value)}
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm bg-white text-brand-dark"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Video URL</label>
+            <input
+              type="text"
+              placeholder="https://res.cloudinary.com/... or /hero-video.mp4"
+              value={data.heroVideo?.videoUrl ?? ""}
+              onChange={(e) => updateHeroVideo("videoUrl", e.target.value)}
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm bg-white text-brand-dark"
+            />
+            <p className="text-xs text-gray-500 mt-1 leading-relaxed">
+              💡 For local videos: upload your .mp4 file to the <code className="bg-gray-100 px-1 py-0.5 rounded">/public</code> folder in your project, then enter <code className="bg-gray-100 px-1 py-0.5 rounded">/filename.mp4</code><br />
+              For cloud videos: upload to Cloudinary.com (free) and paste the URL here
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Section Subtext</label>
+          <textarea
+            rows={3}
+            value={data.heroVideo?.subtext ?? ""}
+            onChange={(e) => updateHeroVideo("subtext", e.target.value)}
+            className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm bg-white text-brand-dark"
+          />
+        </div>
+
+        {data.heroVideo?.videoUrl && (
+          <div className="mt-4 p-4 bg-gray-50 border rounded-lg">
+            <span className="block text-xs font-bold text-gray-700 uppercase mb-2">Video Preview</span>
+            <div className="relative h-[200px] w-full max-w-md border rounded overflow-hidden bg-black">
+              <video
+                key={data.heroVideo.videoUrl}
+                src={data.heroVideo.videoUrl}
+                controls
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* 3. FEATURE CARDS */}
       <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm space-y-6">
-        <h2 className="text-lg font-bold text-brand-dark border-b pb-2">2. Feature Section Content (3 Alternating Blocks)</h2>
+        <h2 className="text-lg font-bold text-brand-dark border-b pb-2">3. Feature Section Content (3 Alternating Blocks)</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {data.features.map((feature, index) => (
@@ -300,9 +414,9 @@ export default function HomeEditor() {
         </div>
       </div>
 
-      {/* 3. ABOUT SNIPPET */}
+      {/* 4. ABOUT SNIPPET */}
       <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm space-y-4">
-        <h2 className="text-lg font-bold text-brand-dark border-b pb-2">3. About Us Snippet</h2>
+        <h2 className="text-lg font-bold text-brand-dark border-b pb-2">4. About Us Snippet</h2>
 
         <div>
           <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Section Heading</label>
@@ -341,9 +455,9 @@ export default function HomeEditor() {
         </div>
       </div>
 
-      {/* 4. STATS BAR */}
+      {/* 5. STATS BAR */}
       <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm space-y-6">
-        <h2 className="text-lg font-bold text-brand-dark border-b pb-2">4. Stats Bar (4 Statistics)</h2>
+        <h2 className="text-lg font-bold text-brand-dark border-b pb-2">5. Stats Bar (4 Statistics)</h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {data.stats.map((stat, index) => (
@@ -380,9 +494,9 @@ export default function HomeEditor() {
         </div>
       </div>
 
-      {/* 5. PRODUCTS PREVIEW */}
+      {/* 6. PRODUCTS PREVIEW */}
       <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm space-y-6">
-        <h2 className="text-lg font-bold text-brand-dark border-b pb-2">5. Products Preview (3 Items)</h2>
+        <h2 className="text-lg font-bold text-brand-dark border-b pb-2">6. Products Preview (3 Items)</h2>
 
         <div className="space-y-6">
           {data.productsPreview.map((item, index) => (

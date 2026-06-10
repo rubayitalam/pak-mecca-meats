@@ -4,11 +4,29 @@ import { useEffect, useState } from "react";
 import HeroSection from "@/components/HeroSection";
 import ContentBlock from "@/components/ContentBlock";
 import ProductCard from "@/components/ProductCard";
+import VideoSection from "@/components/VideoSection";
 import { motion, useReducedMotion } from "framer-motion";
 import { getPageContent } from "@/lib/firestore";
 import { HomeContent } from "@/types/content";
 
-const defaults: HomeContent = {
+interface ExtendedHomeContent extends HomeContent {
+  heroVideo?: {
+    heading: string;
+    subtext: string;
+    buttonText: string;
+    buttonLink: string;
+    videoUrl: string;
+  };
+}
+
+const defaults: ExtendedHomeContent = {
+  heroVideo: {
+    heading: "See How We Work",
+    subtext: "From farm to plate — watch how Pak Mecca Meats delivers premium halal quality every single day.",
+    buttonText: "Learn More",
+    buttonLink: "/about",
+    videoUrl: "",
+  },
   heroHeading: "Premium Halal Lamb & Mutton",
   heroSubheading: "Trusted Worldwide Since 1980",
   heroBody:
@@ -79,7 +97,7 @@ const certs = [
 ];
 
 export default function Home() {
-  const [content, setContent] = useState<HomeContent>(defaults);
+  const [content, setContent] = useState<ExtendedHomeContent>(defaults);
   const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
@@ -97,6 +115,13 @@ export default function Home() {
           aboutImg: dbContent.aboutImg || defaults.aboutImg,
           stats: dbContent.stats || defaults.stats,
           productsPreview: dbContent.productsPreview || defaults.productsPreview,
+          heroVideo: dbContent.heroVideo ? {
+            heading: dbContent.heroVideo.heading ?? defaults.heroVideo?.heading,
+            subtext: dbContent.heroVideo.subtext ?? defaults.heroVideo?.subtext,
+            buttonText: dbContent.heroVideo.buttonText ?? defaults.heroVideo?.buttonText,
+            buttonLink: dbContent.heroVideo.buttonLink ?? defaults.heroVideo?.buttonLink,
+            videoUrl: dbContent.heroVideo.videoUrl ?? defaults.heroVideo?.videoUrl,
+          } : defaults.heroVideo,
         });
       }
     }
@@ -115,6 +140,15 @@ export default function Home() {
         primaryBtnLink="/products"
         secondaryBtnText="About Us"
         secondaryBtnLink="/about"
+      />
+
+      {/* Video Section */}
+      <VideoSection
+        heading={content.heroVideo?.heading ?? ""}
+        subtext={content.heroVideo?.subtext ?? ""}
+        buttonText={content.heroVideo?.buttonText ?? ""}
+        buttonLink={content.heroVideo?.buttonLink ?? ""}
+        videoUrl={content.heroVideo?.videoUrl ?? ""}
       />
 
       {/* Editorial Alternating Features (Replacing Feature Cards) */}

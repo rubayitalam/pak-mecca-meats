@@ -54,6 +54,9 @@ interface SiteSettingsState {
   logoUrl: string;
   siteName: string;
   tagline: string;
+  facebookUrl: string;
+  twitterUrl: string;
+  instagramUrl: string;
 }
 
 export default function HomeEditor() {
@@ -62,6 +65,9 @@ export default function HomeEditor() {
     logoUrl: "/logo.png",
     siteName: "Pak Mecca Meats",
     tagline: "Honouring Tradition With Unmatched Quality",
+    facebookUrl: "",
+    twitterUrl: "",
+    instagramUrl: "",
   });
   
   const [loading, setLoading] = useState(true);
@@ -101,6 +107,9 @@ export default function HomeEditor() {
           logoUrl: dbSettings.logoUrl || "/logo.png",
           siteName: dbSettings.siteName || "Pak Mecca Meats",
           tagline: dbSettings.tagline || "Honouring Tradition With Unmatched Quality",
+          facebookUrl: dbSettings.facebookUrl || "",
+          twitterUrl: dbSettings.twitterUrl || "",
+          instagramUrl: dbSettings.instagramUrl || "",
         });
       }
 
@@ -209,6 +218,42 @@ export default function HomeEditor() {
                 src={previewLogoUrl}
                 alt="Logo Preview"
                 className="max-h-full max-w-full object-contain"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="border-t border-gray-100 pt-6 mt-4">
+          <h3 className="text-sm font-bold text-gray-800 mb-4">Social Media Links</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Facebook URL</label>
+              <input
+                type="text"
+                value={settings.facebookUrl}
+                onChange={(e) => setSettings({ ...settings, facebookUrl: e.target.value })}
+                className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm bg-white text-brand-dark"
+                placeholder="https://facebook.com/..."
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Twitter URL</label>
+              <input
+                type="text"
+                value={settings.twitterUrl}
+                onChange={(e) => setSettings({ ...settings, twitterUrl: e.target.value })}
+                className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm bg-white text-brand-dark"
+                placeholder="https://twitter.com/..."
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Instagram URL</label>
+              <input
+                type="text"
+                value={settings.instagramUrl}
+                onChange={(e) => setSettings({ ...settings, instagramUrl: e.target.value })}
+                className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm bg-white text-brand-dark"
+                placeholder="https://instagram.com/..."
               />
             </div>
           </div>

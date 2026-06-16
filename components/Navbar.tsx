@@ -102,13 +102,16 @@ export default function Navbar() {
         {/* Center: Logo */}
         <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
           <Link href="/" className="block">
-            <div className="relative h-12 w-12 md:h-16 md:w-16 overflow-hidden flex items-center justify-center">
+            <div className="relative h-16 w-16 md:h-24 md:w-24 overflow-hidden flex items-center justify-center">
               <Image
                 src={settings.logoUrl}
                 alt={settings.siteName}
-                width={64}
-                height={64}
-                className="h-12 w-12 md:h-16 md:w-16 object-contain"
+                width={96}
+                height={96}
+                quality={100}
+                unoptimized={true}
+                sizes="(max-width: 768px) 64px, 96px"
+                className="h-16 w-16 md:h-24 md:w-24 object-contain"
                 priority
               />
             </div>

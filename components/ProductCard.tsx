@@ -26,11 +26,7 @@ export default function ProductCard({
       <div className="bg-white border-t-2 border-[#C8A400] overflow-hidden flex flex-col h-full transition-all duration-300">
         {/* Product Image */}
         <div className="relative h-64 w-full overflow-hidden bg-gray-50">
-          <motion.div
-            className="w-full h-full relative"
-            whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
-          >
+          <div className="w-full h-full relative transform transition-transform duration-500 ease-out group-hover:scale-110">
             <Image
               src={image}
               alt={title}
@@ -38,7 +34,13 @@ export default function ProductCard({
               sizes="(max-w-768px) 100vw, (max-w-1200px) 50vw, 33vw"
               className="object-cover"
             />
-          </motion.div>
+            {/* Dark Gradient Overlay */}
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition-colors duration-500 flex items-center justify-center p-4">
+              <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500 text-lg font-bold uppercase tracking-widest text-center">
+                {title}
+              </span>
+            </div>
+          </div>
         </div>
 
         {/* Product Content */}

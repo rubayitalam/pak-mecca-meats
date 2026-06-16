@@ -102,13 +102,13 @@ export default function Footer() {
             </ul>
 
             <div className="flex space-x-4 pt-2">
-              <a href="#" className="p-2 border border-gray-700 hover:border-[#C8A400] text-gray-400 hover:text-[#C8A400] transition-colors duration-200" aria-label="Facebook">
+              <a href={settings.facebookUrl || "#"} className="p-2 border border-gray-700 hover:border-[#C8A400] text-gray-400 hover:text-[#C8A400] transition-colors duration-200" aria-label="Facebook">
                 <Facebook className="w-4 h-4" />
               </a>
-              <a href="#" className="p-2 border border-gray-700 hover:border-[#C8A400] text-gray-400 hover:text-[#C8A400] transition-colors duration-200" aria-label="Twitter">
+              <a href={settings.twitterUrl || "#"} className="p-2 border border-gray-700 hover:border-[#C8A400] text-gray-400 hover:text-[#C8A400] transition-colors duration-200" aria-label="Twitter">
                 <Twitter className="w-4 h-4" />
               </a>
-              <a href="#" className="p-2 border border-gray-700 hover:border-[#C8A400] text-gray-400 hover:text-[#C8A400] transition-colors duration-200" aria-label="Instagram">
+              <a href={settings.instagramUrl || "#"} className="p-2 border border-gray-700 hover:border-[#C8A400] text-gray-400 hover:text-[#C8A400] transition-colors duration-200" aria-label="Instagram">
                 <Instagram className="w-4 h-4" />
               </a>
             </div>

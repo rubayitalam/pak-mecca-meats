@@ -7,6 +7,9 @@ export interface SiteSettings {
   logoUrl: string;
   siteName: string;
   tagline: string;
+  facebookUrl?: string;
+  twitterUrl?: string;
+  instagramUrl?: string;
   loading: boolean;
 }
 
@@ -14,6 +17,9 @@ const DEFAULT_SETTINGS = {
   logoUrl: "/logo.png",
   siteName: "Pak Mecca Meats",
   tagline: "Honouring Tradition With Unmatched Quality",
+  facebookUrl: "",
+  twitterUrl: "",
+  instagramUrl: "",
 };
 
 export function useSiteSettings(): SiteSettings {
@@ -33,6 +39,9 @@ export function useSiteSettings(): SiteSettings {
             logoUrl: data.logoUrl || DEFAULT_SETTINGS.logoUrl,
             siteName: data.siteName || DEFAULT_SETTINGS.siteName,
             tagline: data.tagline || DEFAULT_SETTINGS.tagline,
+            facebookUrl: data.facebookUrl || DEFAULT_SETTINGS.facebookUrl,
+            twitterUrl: data.twitterUrl || DEFAULT_SETTINGS.twitterUrl,
+            instagramUrl: data.instagramUrl || DEFAULT_SETTINGS.instagramUrl,
             loading: false,
           });
         } else {

@@ -57,7 +57,7 @@ export default function HeroSection({
       opacity: 1,
       y: 0,
       transition: {
-        duration: 2.0,
+        duration: 2.8,
         delay: shouldReduceMotion ? 0 : delay,
         ease: [0.16, 1, 0.3, 1],
       },
@@ -70,8 +70,8 @@ export default function HeroSection({
       opacity: 1,
       y: 0,
       transition: {
-        duration: 1.4,
-        delay: shouldReduceMotion ? 0 : 3.2,
+        duration: 1.8,
+        delay: shouldReduceMotion ? 0 : 5.0,
         ease: [0.16, 1, 0.3, 1],
       },
     },
@@ -84,7 +84,7 @@ export default function HeroSection({
       y: 0,
       transition: {
         duration: 0.5,
-        delay: shouldReduceMotion ? 0 : 4.0,
+        delay: shouldReduceMotion ? 0 : 6.5,
         ease: [0.16, 1, 0.3, 1],
       },
     },
@@ -142,7 +142,7 @@ export default function HeroSection({
                 QUALITY
               </motion.span>
               <motion.span
-                custom={1.0}
+                custom={1.8}
                 variants={wordVariants}
                 initial="hidden"
                 animate="visible"
@@ -151,7 +151,7 @@ export default function HeroSection({
                 INTEGRITY
               </motion.span>
               <motion.span
-                custom={2.0}
+                custom={3.2}
                 variants={wordVariants}
                 initial="hidden"
                 animate="visible"

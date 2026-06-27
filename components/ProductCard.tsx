@@ -45,12 +45,7 @@ export default function ProductCard({
                 className="object-cover absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
               />
             )}
-            {/* Dark Gradient Overlay */}
-            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition-colors duration-500 flex items-center justify-center p-4">
-              <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500 text-lg font-bold uppercase tracking-widest text-center">
-                {title}
-              </span>
-            </div>
+
           </div>
         </div>
 

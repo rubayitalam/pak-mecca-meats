@@ -584,6 +584,17 @@ export default function HomeEditor() {
                       newPreviews[index] = { ...newPreviews[index], image: e.target.value };
                       setData({ ...data, productsPreview: newPreviews });
                     }}
+                    className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm bg-white text-brand-dark mb-2"
+                  />
+                  <label className="block text-xs font-semibold text-gray-700 mb-1">Second Image URL (Hover)</label>
+                  <input
+                    type="text"
+                    value={item.image2 || ""}
+                    onChange={(e) => {
+                      const newPreviews = [...data.productsPreview];
+                      newPreviews[index] = { ...newPreviews[index], image2: e.target.value };
+                      setData({ ...data, productsPreview: newPreviews });
+                    }}
                     className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm bg-white text-brand-dark"
                   />
                 </div>

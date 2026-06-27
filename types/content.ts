@@ -7,6 +7,7 @@ export interface ProductPreviewItem {
   title: string;
   description: string;
   image: string;
+  image2?: string;
   link: string;
 }
 
@@ -61,6 +62,7 @@ export interface ProductItem {
   name: string;
   description: string;
   image: string;
+  image2?: string;
 }
 
 export interface ProductsContent {

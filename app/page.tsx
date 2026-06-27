@@ -240,6 +240,7 @@ export default function Home() {
                 title={item.title}
                 description={item.description}
                 image={item.image}
+                image2={item.image2}
                 link={item.link}
               />
             ))}

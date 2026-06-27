@@ -8,6 +8,7 @@ interface ProductCardProps {
   title: string;
   description: string;
   image: string;
+  image2?: string;
   link: string;
   btnText?: string;
 }
@@ -16,6 +17,7 @@ export default function ProductCard({
   title,
   description,
   image,
+  image2,
   link,
   btnText = "Discover More",
 }: ProductCardProps) {
@@ -34,6 +36,15 @@ export default function ProductCard({
               sizes="(max-w-768px) 100vw, (max-w-1200px) 50vw, 33vw"
               className="object-cover"
             />
+            {image2 && (
+              <Image
+                src={image2}
+                alt={`${title} hover`}
+                fill
+                sizes="(max-w-768px) 100vw, (max-w-1200px) 50vw, 33vw"
+                className="object-cover absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+              />
+            )}
             {/* Dark Gradient Overlay */}
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition-colors duration-500 flex items-center justify-center p-4">
               <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500 text-lg font-bold uppercase tracking-widest text-center">

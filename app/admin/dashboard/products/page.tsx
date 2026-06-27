@@ -253,6 +253,13 @@ export default function ProductsEditor() {
                       type="text"
                       value={product.image}
                       onChange={(e) => updateProduct(section.id, index, "image", e.target.value)}
+                      className="w-full px-2 py-1.5 border rounded text-xs focus:outline-none focus:border-brand-green bg-white text-gray-500 mb-2"
+                    />
+                    <label className="block text-[10px] font-bold text-gray-500 uppercase mb-0.5">Second Image URL (Hover)</label>
+                    <input
+                      type="text"
+                      value={product.image2 || ""}
+                      onChange={(e) => updateProduct(section.id, index, "image2", e.target.value)}
                       className="w-full px-2 py-1.5 border rounded text-xs focus:outline-none focus:border-brand-green bg-white text-gray-500"
                     />
                   </div>

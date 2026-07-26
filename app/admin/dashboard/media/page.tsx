@@ -10,10 +10,22 @@ const defaults: MediaContent = {
   heroHeading: "Media & Press",
   heroSubheading: "Latest Updates and Social Highlights",
   heroBg: "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1600",
-  instagramUrls: [
-    "https://www.instagram.com/reel/C8_zJ5jM_p-/",
-    "https://www.instagram.com/p/C66c1S_sgwA/",
-    "https://www.instagram.com/reel/C57d_hssKee/",
+  instagramPosts: [
+    {
+      url: "https://www.instagram.com/reel/C8_zJ5jM_p-/",
+      thumbnail: "https://images.unsplash.com/photo-1544025162-d76694265947?w=600",
+      caption: "Hand-selected, premium halal British lamb, processed daily at our central Birmingham facility.",
+    },
+    {
+      url: "https://www.instagram.com/p/C66c1S_sgwA/",
+      thumbnail: "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=600",
+      caption: "Certified by the Halal Monitoring Committee (HMC). Farms, transport, slaughter, and processing under strict supervision.",
+    },
+    {
+      url: "https://www.instagram.com/reel/C57d_hssKee/",
+      thumbnail: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=600",
+      caption: "Exporting premium lamb & mutton carcasses to Europe, the Middle East, and beyond.",
+    },
   ],
   blogs: [
     {
@@ -37,7 +49,11 @@ export default function MediaDashboardEditor() {
   const [data, setData] = useState<MediaContent>(defaults);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [newInstagramUrl, setNewInstagramUrl] = useState("");
+
+  // States for adding a new Instagram post
+  const [newPostUrl, setNewPostUrl] = useState("");
+  const [newPostThumbnail, setNewPostThumbnail] = useState("");
+  const [newPostCaption, setNewPostCaption] = useState("");
 
   useEffect(() => {
     async function load() {
@@ -47,7 +63,7 @@ export default function MediaDashboardEditor() {
           heroHeading: dbData.heroHeading || defaults.heroHeading,
           heroSubheading: dbData.heroSubheading || defaults.heroSubheading,
           heroBg: dbData.heroBg || defaults.heroBg,
-          instagramUrls: dbData.instagramUrls || defaults.instagramUrls || [],
+          instagramPosts: dbData.instagramPosts || defaults.instagramPosts || [],
           blogs: dbData.blogs || defaults.blogs || [],
         });
       }
@@ -67,29 +83,57 @@ export default function MediaDashboardEditor() {
     setSaving(false);
   };
 
-  const handleAddInstagramUrl = () => {
-    if (!newInstagramUrl.trim()) {
+  const handleAddInstagramPost = () => {
+    if (!newPostUrl.trim()) {
       toast.error("Please enter a valid Instagram URL.");
       return;
     }
-    if (!newInstagramUrl.includes("instagram.com")) {
+    if (!newPostUrl.includes("instagram.com")) {
       toast.error("URL must be a valid instagram.com link.");
       return;
     }
+    if (!newPostThumbnail.trim()) {
+      toast.error("Please enter a Thumbnail Image URL.");
+      return;
+    }
+    
+    const newPost = {
+      url: newPostUrl.trim(),
+      thumbnail: newPostThumbnail.trim(),
+      caption: newPostCaption.trim() || undefined,
+    };
+
     setData((prev) => ({
       ...prev,
-      instagramUrls: [...(prev.instagramUrls || []), newInstagramUrl.trim()],
+      instagramPosts: [...(prev.instagramPosts || []), newPost],
     }));
-    setNewInstagramUrl("");
-    toast.success("Instagram URL added to list (don't forget to Save changes!)");
+
+    setNewPostUrl("");
+    setNewPostThumbnail("");
+    setNewPostCaption("");
+    toast.success("Instagram post added to list (save changes to store it!)");
   };
 
-  const handleRemoveInstagramUrl = (indexToRemove: number) => {
+  const handleRemoveInstagramPost = (indexToRemove: number) => {
     setData((prev) => ({
       ...prev,
-      instagramUrls: prev.instagramUrls.filter((_, idx) => idx !== indexToRemove),
+      instagramPosts: prev.instagramPosts.filter((_, idx) => idx !== indexToRemove),
     }));
-    toast.success("Instagram URL removed from list");
+    toast.success("Instagram post removed from list");
+  };
+
+  const handleUpdateInstagramPostField = (index: number, field: "url" | "thumbnail" | "caption", value: string) => {
+    setData((prev) => {
+      const updatedPosts = [...prev.instagramPosts];
+      updatedPosts[index] = {
+        ...updatedPosts[index],
+        [field]: value,
+      };
+      return {
+        ...prev,
+        instagramPosts: updatedPosts,
+      };
+    });
   };
 
   const handleAddBlogEntry = () => {
@@ -143,7 +187,7 @@ export default function MediaDashboardEditor() {
     <div className="space-y-10 max-w-4xl">
       <div>
         <h1 className="text-2xl font-bold text-brand-dark">Media Page Content Editor</h1>
-        <p className="text-gray-500 text-sm mt-1">Manage press releases, news blogs, and embedded social reels.</p>
+        <p className="text-gray-500 text-sm mt-1">Manage press releases, news blogs, and social highlights.</p>
       </div>
 
       {/* 1. HERO SECTION */}
@@ -188,69 +232,143 @@ export default function MediaDashboardEditor() {
         </div>
       </div>
 
-      {/* 2. INSTAGRAM REELS MANAGER */}
+      {/* 2. INSTAGRAM POSTS MANAGER */}
       <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm space-y-6">
         <div className="border-b pb-2">
-          <h2 className="text-lg font-bold text-brand-dark">2. Instagram Embed Manager</h2>
-          <p className="text-xs text-gray-500 mt-0.5">Add URLs of Instagram posts or reels to display in the social grid.</p>
+          <h2 className="text-lg font-bold text-brand-dark">2. Instagram Posts Manager</h2>
+          <p className="text-xs text-gray-500 mt-0.5">Link Instagram posts/reels and supply a thumbnail image to avoid embedding blocks.</p>
         </div>
 
-        <div className="space-y-4">
-          {/* Add URL Form */}
-          <div className="flex gap-2">
-            <div className="relative flex-grow">
-              <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Video className="h-4 w-4 text-gray-400" />
-              </span>
+        <div className="space-y-6">
+          {/* Add Instagram Post Form */}
+          <div className="bg-gray-50 p-4 border rounded-lg space-y-4">
+            <h3 className="text-xs font-bold text-brand-dark uppercase tracking-wider">Add New Instagram Card</h3>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-[10px] font-bold text-gray-600 uppercase mb-1">Instagram Post URL (Required)</label>
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Video className="h-4.5 w-4.5 text-gray-400" />
+                  </span>
+                  <input
+                    type="text"
+                    value={newPostUrl}
+                    onChange={(e) => setNewPostUrl(e.target.value)}
+                    placeholder="https://www.instagram.com/reel/C8_zJ5jM_p-/"
+                    className="w-full pl-9 pr-3 py-2 border rounded focus:outline-none focus:border-brand-green text-xs bg-white text-brand-dark"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold text-gray-600 uppercase mb-1">Thumbnail Image URL (Required)</label>
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <ImageIcon className="h-4.5 w-4.5 text-gray-400" />
+                  </span>
+                  <input
+                    type="text"
+                    value={newPostThumbnail}
+                    onChange={(e) => setNewPostThumbnail(e.target.value)}
+                    placeholder="https://images.unsplash.com/..."
+                    className="w-full pl-9 pr-3 py-2 border rounded focus:outline-none focus:border-brand-green text-xs bg-white text-brand-dark"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-[10px] font-bold text-gray-600 uppercase mb-1">Caption / Overlay Text (Optional)</label>
               <input
                 type="text"
-                value={newInstagramUrl}
-                onChange={(e) => setNewInstagramUrl(e.target.value)}
-                placeholder="https://www.instagram.com/reel/C8_zJ5jM_p-/"
-                className="w-full pl-9 pr-3 py-2 border rounded focus:outline-none focus:border-brand-green text-sm bg-white text-brand-dark"
+                value={newPostCaption}
+                onChange={(e) => setNewPostCaption(e.target.value)}
+                placeholder="E.g. Check out our latest Birmingham facility expansion video!"
+                className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-xs bg-white text-brand-dark"
               />
             </div>
+
             <button
               type="button"
-              onClick={handleAddInstagramUrl}
-              className="px-4 py-2 bg-brand-green hover:bg-brand-green/90 text-white rounded text-xs uppercase font-bold tracking-wider flex items-center gap-1.5 transition-colors"
+              onClick={handleAddInstagramPost}
+              className="px-4 py-2.5 bg-brand-green hover:bg-brand-green/90 text-white rounded text-xs uppercase font-bold tracking-wider flex items-center gap-1.5 transition-colors"
             >
-              <Plus className="w-4 h-4" /> Add
+              <Plus className="w-4 h-4" /> Add Post Card
             </button>
           </div>
 
-          {/* URL List */}
-          {data.instagramUrls && data.instagramUrls.length > 0 ? (
-            <div className="border rounded divide-y divide-gray-150 max-h-[300px] overflow-y-auto">
-              {data.instagramUrls.map((url, index) => (
-                <div key={index} className="p-3 flex items-center justify-between hover:bg-gray-50 transition-colors">
-                  <div className="flex flex-col min-w-0 pr-4">
-                    <span className="text-xs font-bold text-brand-green uppercase tracking-wide">Embed #{index + 1}</span>
-                    <a
-                      href={url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xs text-blue-600 hover:underline truncate block"
+          {/* List of Current Posts */}
+          <div className="space-y-4">
+            <h3 className="text-xs font-bold text-brand-dark uppercase tracking-wider">Current Social Grid Cards</h3>
+            
+            {data.instagramPosts && data.instagramPosts.length > 0 ? (
+              <div className="space-y-4 divide-y divide-gray-100">
+                {data.instagramPosts.map((post, index) => (
+                  <div key={index} className={`pt-4 ${index === 0 ? "pt-0" : ""} flex flex-col md:flex-row gap-4 items-start relative`}>
+                    
+                    {/* Thumbnail Mini Preview */}
+                    <div className="w-20 h-20 rounded border overflow-hidden bg-gray-50 shrink-0 relative flex items-center justify-center">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={post.thumbnail}
+                        alt="Post Mini Thumbnail"
+                        className="object-cover w-full h-full"
+                        onError={(e) => {
+                          (e.target as HTMLElement).style.display = "none";
+                        }}
+                      />
+                    </div>
+
+                    {/* Inputs */}
+                    <div className="flex-grow grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
+                      <div>
+                        <label className="block text-[9px] font-bold text-gray-400 uppercase mb-0.5">Post URL</label>
+                        <input
+                          type="text"
+                          value={post.url}
+                          onChange={(e) => handleUpdateInstagramPostField(index, "url", e.target.value)}
+                          className="w-full px-2 py-1 border rounded focus:outline-none focus:border-brand-green text-xs bg-white text-brand-dark"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[9px] font-bold text-gray-400 uppercase mb-0.5">Thumbnail URL</label>
+                        <input
+                          type="text"
+                          value={post.thumbnail}
+                          onChange={(e) => handleUpdateInstagramPostField(index, "thumbnail", e.target.value)}
+                          className="w-full px-2 py-1 border rounded focus:outline-none focus:border-brand-green text-xs bg-white text-brand-dark"
+                        />
+                      </div>
+                      <div className="sm:col-span-2">
+                        <label className="block text-[9px] font-bold text-gray-400 uppercase mb-0.5">Caption</label>
+                        <input
+                          type="text"
+                          value={post.caption || ""}
+                          placeholder="No caption provided"
+                          onChange={(e) => handleUpdateInstagramPostField(index, "caption", e.target.value)}
+                          className="w-full px-2 py-1 border rounded focus:outline-none focus:border-brand-green text-xs bg-white text-brand-dark italic"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Trash Button */}
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveInstagramPost(index)}
+                      className="p-2 text-brand-red hover:bg-brand-red/10 rounded transition-colors self-center shrink-0"
+                      title="Remove post"
                     >
-                      {url}
-                    </a>
+                      <Trash className="w-4 h-4" />
+                    </button>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveInstagramUrl(index)}
-                    className="p-1.5 text-brand-red hover:bg-brand-red/10 rounded transition-colors shrink-0"
-                    title="Remove link"
-                  >
-                    <Trash className="w-4 h-4" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-6 border border-dashed border-gray-200 rounded text-gray-400 text-xs">
-              No Instagram links added. Add some links above!
-            </div>
-          )}
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8 border border-dashed border-gray-250 rounded text-gray-400 text-xs">
+                No Instagram post cards created. Add some cards above!
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

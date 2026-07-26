@@ -6,16 +6,28 @@ import { getPageContent } from "@/lib/firestore";
 import { MediaContent } from "@/types/content";
 import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Play } from "lucide-react";
 
 const defaults: MediaContent = {
   heroHeading: "Media & Press",
   heroSubheading: "Latest Updates and Social Highlights",
   heroBg: "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1600",
-  instagramUrls: [
-    "https://www.instagram.com/reel/C8_zJ5jM_p-/",
-    "https://www.instagram.com/p/C66c1S_sgwA/",
-    "https://www.instagram.com/reel/C57d_hssKee/",
+  instagramPosts: [
+    {
+      url: "https://www.instagram.com/reel/C8_zJ5jM_p-/",
+      thumbnail: "https://images.unsplash.com/photo-1544025162-d76694265947?w=600",
+      caption: "Hand-selected, premium halal British lamb, processed daily at our central Birmingham facility.",
+    },
+    {
+      url: "https://www.instagram.com/p/C66c1S_sgwA/",
+      thumbnail: "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=600",
+      caption: "Certified by the Halal Monitoring Committee (HMC). Farms, transport, slaughter, and processing under strict supervision.",
+    },
+    {
+      url: "https://www.instagram.com/reel/C57d_hssKee/",
+      thumbnail: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=600",
+      caption: "Exporting premium lamb & mutton carcasses to Europe, the Middle East, and beyond.",
+    },
   ],
   blogs: [
     {
@@ -40,24 +52,6 @@ const defaults: MediaContent = {
       image: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=800",
     }
   ]
-};
-
-const getInstagramEmbedUrl = (url: string) => {
-  if (!url) return "";
-  try {
-    const urlObj = new URL(url);
-    const pathname = urlObj.pathname;
-    const parts = pathname.split("/").filter(Boolean);
-    if (parts.length >= 2 && (parts[0] === "p" || parts[0] === "reel" || parts[0] === "tv")) {
-      return `https://www.instagram.com/${parts[0]}/${parts[1]}/embed`;
-    }
-    if (parts.length === 1) {
-      return `https://www.instagram.com/p/${parts[0]}/embed`;
-    }
-  } catch {}
-  
-  const cleanUrl = url.trim().split("?")[0];
-  return cleanUrl.endsWith("/") ? `${cleanUrl}embed` : `${cleanUrl}/embed`;
 };
 
 const appendTimestamp = (url: string, ts: number) => {
@@ -85,7 +79,7 @@ export default function MediaPage() {
           heroHeading: dbContent.heroHeading || defaults.heroHeading,
           heroSubheading: dbContent.heroSubheading || defaults.heroSubheading,
           heroBg: dbContent.heroBg || defaults.heroBg,
-          instagramUrls: dbContent.instagramUrls || defaults.instagramUrls,
+          instagramPosts: dbContent.instagramPosts || defaults.instagramPosts || [],
           blogs: dbContent.blogs || defaults.blogs,
         });
         setImgTimestamp(Date.now());
@@ -120,34 +114,51 @@ export default function MediaPage() {
             </p>
           </div>
 
-          {content.instagramUrls && content.instagramUrls.length > 0 ? (
+          {content.instagramPosts && content.instagramPosts.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {content.instagramUrls.map((url, index) => {
-                const embedUrl = getInstagramEmbedUrl(url);
-                if (!embedUrl) return null;
-                return (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: shouldReduceMotion ? 0 : (index % 3) * 0.1 }}
-                    className="bg-black border border-[#C8A400]/20 rounded-lg overflow-hidden flex flex-col justify-center shadow-lg relative min-h-[480px] group hover:border-[#C8A400]/50 transition-all duration-300"
-                  >
-                    <iframe
-                      src={embedUrl}
-                      className="w-full h-[480px] border-0 overflow-hidden"
-                      scrolling="no"
-                      allowFullScreen
-                      allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+              {content.instagramPosts.map((post, index) => (
+                <motion.a
+                  key={index}
+                  href={post.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: shouldReduceMotion ? 0 : (index % 3) * 0.1 }}
+                  className="flex flex-col h-full bg-[#151515] border border-[#C8A400]/20 rounded-lg overflow-hidden group hover:border-[#C8A400]/50 transition-all duration-300 shadow-xl"
+                >
+                  {/* Image/Thumbnail Container */}
+                  <div className="relative h-[300px] w-full overflow-hidden bg-black">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={appendTimestamp(post.thumbnail, imgTimestamp)}
+                      alt={post.caption || `Instagram Post ${index + 1}`}
+                      className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
                     />
-                  </motion.div>
-                );
-              })}
+                    {/* Hover Overlay */}
+                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                      {/* Play Button Icon */}
+                      <div className="w-14 h-14 rounded-full bg-[#C8A400] text-black flex items-center justify-center shadow-lg transform scale-90 group-hover:scale-100 transition-all duration-300">
+                        <Play className="w-6 h-6 fill-black ml-0.5 text-black" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Caption area */}
+                  {post.caption && (
+                    <div className="p-5 flex-grow bg-[#151515] border-t border-white/5 flex items-center">
+                      <p className="text-gray-300 text-xs font-light leading-relaxed line-clamp-2 italic">
+                        &ldquo;{post.caption}&rdquo;
+                      </p>
+                    </div>
+                  )}
+                </motion.a>
+              ))}
             </div>
           ) : (
             <div className="text-center py-12 border border-dashed border-white/10 rounded-lg bg-white/5">
-              <p className="text-gray-500 text-sm">No Instagram posts embedded at the moment.</p>
+              <p className="text-gray-500 text-sm">No Instagram posts linked at the moment.</p>
             </div>
           )}
         </div>

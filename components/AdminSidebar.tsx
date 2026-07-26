@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
-import { Home, Menu, X, LogOut, ShieldCheck, Phone, LayoutGrid } from "lucide-react";
+import { Home, Menu, X, LogOut, ShieldCheck, Phone, LayoutGrid, Film } from "lucide-react";
 import toast from "react-hot-toast";
 
 // Navigation Links
@@ -14,6 +14,7 @@ const navItems = [
   { name: "About Page", href: "/admin/dashboard/about", icon: LayoutGrid },
   { name: "Products Page", href: "/admin/dashboard/products", icon: LayoutGrid }, // Let's use layoutgrid or custom icons
   { name: "Assurance Page", href: "/admin/dashboard/assurance", icon: ShieldCheck },
+  { name: "Media Page", href: "/admin/dashboard/media", icon: Film },
   { name: "Contact Page", href: "/admin/dashboard/contact", icon: Phone },
 ];
 

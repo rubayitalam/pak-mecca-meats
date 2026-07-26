@@ -96,8 +96,22 @@ const certs = [
   "Family Owned",
 ];
 
+const appendTimestamp = (url: string, ts: number) => {
+  if (!url || !ts) return url;
+  try {
+    const urlObj = new URL(url);
+    urlObj.searchParams.set("t", ts.toString());
+    return urlObj.toString();
+  } catch {
+    const separator = url.includes("?") ? "&" : "?";
+    return `${url}${separator}t=${ts}`;
+  }
+};
+
 export default function Home() {
   const [content, setContent] = useState<ExtendedHomeContent>(defaults);
+  const [imgTimestamp, setImgTimestamp] = useState<number>(0);
+  const [loaded, setLoaded] = useState(false);
   const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
@@ -123,10 +137,16 @@ export default function Home() {
             videoUrl: dbContent.heroVideo.videoUrl ?? defaults.heroVideo?.videoUrl,
           } : defaults.heroVideo,
         });
+        setImgTimestamp(Date.now());
       }
+      setLoaded(true);
     }
     loadContent();
   }, []);
+
+  if (!loaded) {
+    return <div className="min-h-screen bg-[#1A1A1A]" />;
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
@@ -135,7 +155,7 @@ export default function Home() {
         heading={content.heroHeading}
         subheading={content.heroSubheading}
         bodyText={content.heroBody}
-        bgImage={content.heroBg}
+        bgImage={appendTimestamp(content.heroBg, imgTimestamp)}
         primaryBtnText="Explore Products"
         primaryBtnLink="/products"
         secondaryBtnText="About Us"
@@ -151,7 +171,7 @@ export default function Home() {
           <ContentBlock
             heading={content.features[0].title}
             body={content.features[0].description}
-            image={(content.features[0] as any).image || "https://images.unsplash.com/photo-1584744982491-665216d95f8b?w=800"}
+            image={appendTimestamp((content.features[0] as any).image || "https://images.unsplash.com/photo-1584744982491-665216d95f8b?w=800", imgTimestamp)}
             reverse={false}
             label="AUTHENTICITY"
             bgColor="bg-[#FAFAFA]"
@@ -161,7 +181,7 @@ export default function Home() {
           <ContentBlock
             heading={content.features[1].title}
             body={content.features[1].description}
-            image={(content.features[1] as any).image || "https://images.unsplash.com/photo-1600891964092-4316c288032e?w=800"}
+            image={appendTimestamp((content.features[1] as any).image || "https://images.unsplash.com/photo-1600891964092-4316c288032e?w=800", imgTimestamp)}
             reverse={true}
             label="LEGACY"
             bgColor="bg-white"
@@ -171,7 +191,7 @@ export default function Home() {
           <ContentBlock
             heading={content.features[2].title}
             body={content.features[2].description}
-            image={(content.features[2] as any).image || "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800"}
+            image={appendTimestamp((content.features[2] as any).image || "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800", imgTimestamp)}
             reverse={false}
             label="CAPACITY"
             bgColor="bg-[#FAFAFA]"
@@ -187,7 +207,7 @@ export default function Home() {
         <ContentBlock
           heading={content.aboutHeading}
           body={content.aboutBody}
-          image={content.aboutImg}
+          image={appendTimestamp(content.aboutImg, imgTimestamp)}
           reverse={true}
           label="OUR STORY"
           btnText="Learn More About Us"
@@ -239,8 +259,8 @@ export default function Home() {
                 key={index}
                 title={item.title}
                 description={item.description}
-                image={item.image}
-                image2={item.image2}
+                image={appendTimestamp(item.image, imgTimestamp)}
+                image2={item.image2 ? appendTimestamp(item.image2, imgTimestamp) : undefined}
                 link={item.link}
               />
             ))}

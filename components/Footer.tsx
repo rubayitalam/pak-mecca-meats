@@ -66,6 +66,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/media" className="text-gray-400 hover:text-[#C8A400] transition-colors duration-200">
+                  Media
+                </Link>
+              </li>
+              <li>
                 <Link href="/contact" className="text-gray-400 hover:text-[#C8A400] transition-colors duration-200">
                   Contact Us
                 </Link>

@@ -95,3 +95,20 @@ export interface ContactContent {
   hours: string;
   saturdayHours: string;
 }
+
+export interface BlogEntry {
+  title: string;
+  date: string;
+  description: string;
+  link: string;
+  image: string;
+}
+
+export interface MediaContent {
+  heroHeading: string;
+  heroSubheading: string;
+  heroBg: string;
+  instagramUrls: string[];
+  blogs: BlogEntry[];
+}
+

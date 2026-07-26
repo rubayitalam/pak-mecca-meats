@@ -108,7 +108,7 @@ export interface MediaContent {
   heroHeading: string;
   heroSubheading: string;
   heroBg: string;
-  instagramPosts: { url: string; thumbnail: string; caption?: string; }[];
+  instagramPosts: { url: string; thumbnail?: string; caption?: string; }[];
   blogs: BlogEntry[];
 }
 

@@ -14,9 +14,8 @@ const defaults: MediaContent = {
   heroBg: "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1600",
   instagramPosts: [
     {
-      url: "https://www.instagram.com/reel/C8_zJ5jM_p-/",
-      thumbnail: "https://images.unsplash.com/photo-1544025162-d76694265947?w=600",
-      caption: "Hand-selected, premium halal British lamb, processed daily at our central Birmingham facility.",
+      url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      caption: "Watch our corporate video summarizing our central Birmingham processing capabilities.",
     },
     {
       url: "https://www.instagram.com/p/C66c1S_sgwA/",
@@ -24,7 +23,7 @@ const defaults: MediaContent = {
       caption: "Certified by the Halal Monitoring Committee (HMC). Farms, transport, slaughter, and processing under strict supervision.",
     },
     {
-      url: "https://www.instagram.com/reel/C57d_hssKee/",
+      url: "https://www.facebook.com/PMM/posts/12345678",
       thumbnail: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=600",
       caption: "Exporting premium lamb & mutton carcasses to Europe, the Middle East, and beyond.",
     },
@@ -54,6 +53,17 @@ const defaults: MediaContent = {
   ]
 };
 
+const getYoutubeId = (url: string): string | null => {
+  if (!url) return null;
+  try {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return match && match[2].length === 11 ? match[2] : null;
+  } catch {
+    return null;
+  }
+};
+
 const appendTimestamp = (url: string, ts: number) => {
   if (!url || !ts) return url;
   try {
@@ -65,6 +75,84 @@ const appendTimestamp = (url: string, ts: number) => {
     return `${url}${separator}t=${ts}`;
   }
 };
+
+function MediaCard({ post, imgTimestamp }: { post: MediaContent["instagramPosts"][0]; imgTimestamp: number }) {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const ytId = getYoutubeId(post.url);
+  const isYoutube = ytId !== null;
+
+  const thumbnail = post.thumbnail || (ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : "");
+
+  if (isYoutube && isPlaying) {
+    return (
+      <div className="flex flex-col h-full bg-[#151515] border border-[#C8A400]/40 rounded-lg overflow-hidden shadow-xl">
+        <div className="relative h-64 w-full bg-black">
+          <iframe
+            src={`https://www.youtube.com/embed/${ytId}?autoplay=1`}
+            className="w-full h-full border-0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+        {post.caption && (
+          <div className="p-5 flex-grow bg-[#151515] border-t border-white/5 flex items-center">
+            <p className="text-gray-300 text-xs font-light leading-relaxed line-clamp-2 italic">
+              &ldquo;{post.caption}&rdquo;
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  const handleClick = (e: React.MouseEvent) => {
+    if (isYoutube) {
+      e.preventDefault();
+      setIsPlaying(true);
+    }
+  };
+
+  return (
+    <a
+      href={post.url}
+      target={isYoutube ? undefined : "_blank"}
+      rel={isYoutube ? undefined : "noopener noreferrer"}
+      onClick={handleClick}
+      className="flex flex-col h-full bg-[#151515] border border-[#C8A400]/20 rounded-lg overflow-hidden group hover:border-[#C8A400]/50 transition-all duration-300 shadow-xl cursor-pointer"
+    >
+      {/* Image Container */}
+      <div className="relative h-64 w-full overflow-hidden bg-black">
+        {thumbnail ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={appendTimestamp(thumbnail, imgTimestamp)}
+            alt={post.caption || "Media post"}
+            className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+          />
+        ) : (
+          <div className="w-full h-full bg-[#1A1A1A] flex items-center justify-center text-gray-500 text-xs">
+            No Thumbnail Provided
+          </div>
+        )}
+        {/* Play Icon Overlay */}
+        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+          <div className="w-14 h-14 rounded-full bg-[#C8A400] text-black flex items-center justify-center shadow-lg transform scale-90 group-hover:scale-100 transition-all duration-300">
+            <Play className="w-6 h-6 fill-black ml-0.5 text-black" />
+          </div>
+        </div>
+      </div>
+
+      {/* Caption */}
+      {post.caption && (
+        <div className="p-5 flex-grow bg-[#151515] border-t border-white/5 flex items-center">
+          <p className="text-gray-300 text-xs font-light leading-relaxed line-clamp-2 italic">
+            &ldquo;{post.caption}&rdquo;
+          </p>
+        </div>
+      )}
+    </a>
+  );
+}
 
 export default function MediaPage() {
   const [content, setContent] = useState<MediaContent>(defaults);
@@ -99,7 +187,7 @@ export default function MediaPage() {
         bgImage={appendTimestamp(content.heroBg, imgTimestamp)}
       />
 
-      {/* Editorial Instagram Social Section */}
+      {/* Editorial Media Social Section */}
       <section className="py-20 lg:py-32 bg-[#1A1A1A] border-y border-[#C8A400]/20 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 xl:px-24">
           <div className="max-w-2xl mb-16 text-center md:text-left">
@@ -107,58 +195,30 @@ export default function MediaPage() {
               Social Highlights
             </span>
             <h2 className="text-3xl sm:text-4xl font-light text-white tracking-wide uppercase">
-              Instagram Reels & Feed
+              Featured Video & Feed
             </h2>
             <p className="text-gray-400 text-sm font-light mt-3 leading-relaxed">
-              Stay updated with our latest media reels, processing insights, and direct farm-to-table snippets. Follow us on Instagram for daily coverage.
+              Stay updated with our latest media reels, processing insights, and direct farm-to-table snippets. Watch YouTube videos inline, or view our Instagram and Facebook features.
             </p>
           </div>
 
           {content.instagramPosts && content.instagramPosts.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {content.instagramPosts.map((post, index) => (
-                <motion.a
+                <motion.div
                   key={index}
-                  href={post.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: shouldReduceMotion ? 0 : (index % 3) * 0.1 }}
-                  className="flex flex-col h-full bg-[#151515] border border-[#C8A400]/20 rounded-lg overflow-hidden group hover:border-[#C8A400]/50 transition-all duration-300 shadow-xl"
                 >
-                  {/* Image/Thumbnail Container */}
-                  <div className="relative h-[300px] w-full overflow-hidden bg-black">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={appendTimestamp(post.thumbnail, imgTimestamp)}
-                      alt={post.caption || `Instagram Post ${index + 1}`}
-                      className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
-                    />
-                    {/* Hover Overlay */}
-                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                      {/* Play Button Icon */}
-                      <div className="w-14 h-14 rounded-full bg-[#C8A400] text-black flex items-center justify-center shadow-lg transform scale-90 group-hover:scale-100 transition-all duration-300">
-                        <Play className="w-6 h-6 fill-black ml-0.5 text-black" />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Caption area */}
-                  {post.caption && (
-                    <div className="p-5 flex-grow bg-[#151515] border-t border-white/5 flex items-center">
-                      <p className="text-gray-300 text-xs font-light leading-relaxed line-clamp-2 italic">
-                        &ldquo;{post.caption}&rdquo;
-                      </p>
-                    </div>
-                  )}
-                </motion.a>
+                  <MediaCard post={post} imgTimestamp={imgTimestamp} />
+                </motion.div>
               ))}
             </div>
           ) : (
             <div className="text-center py-12 border border-dashed border-white/10 rounded-lg bg-white/5">
-              <p className="text-gray-500 text-sm">No Instagram posts linked at the moment.</p>
+              <p className="text-gray-500 text-sm">No media posts linked at the moment.</p>
             </div>
           )}
         </div>

@@ -12,17 +12,17 @@ const defaults: AssuranceContent = {
   sections: [
     {
       heading: "HALAL ASSURANCE",
-      image: "https://images.unsplash.com/photo-1609501676725-7186f017a4b7?w=800",
+      image: "https://i.imgur.com/joOcwvi.jpeg",
       body: "Pak Mecca Meats Limited is certified by the Halal Monitoring Committee (HMC), the leading and most established accreditation organisation in the EU. We supply the finest natural quality British lamb and mutton, in strict accordance with Islamic Shariah compliance, from farm to plate.",
     },
     {
       heading: "HACCP CERTIFICATION",
-      image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800",
+      image: "https://i.imgur.com/YRWsnmE.jpeg",
       body: "HACCP is a management system addressing food safety through the analysis and control of biological, chemical, and physical hazards from raw material production, procurement and handling, to manufacturing, distribution and consumption of the finished product.",
     },
     {
       heading: "FOOD STANDARDS AGENCY",
-      image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800",
+      image: "https://i.postimg.cc/fLhhST23/Gemini-Generated-Image-4gwg3i4gwg3i4gwg.png",
       body: "The Food Standards Agency (FSA) is responsible for food safety and food hygiene in England, Wales and Northern Ireland. It works with local authorities to enforce food safety regulations, and our staff work in meat plants to ensure standards are consistently met.",
     },
   ],

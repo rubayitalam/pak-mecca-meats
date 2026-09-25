@@ -12,7 +12,7 @@ const OFFAL_IMG = "https://images.unsplash.com/photo-1624991954017-b0e1c09e2c6e?
 const defaults: ProductsContent = {
   heroHeading: "Our Products",
   heroSubheading: "An award winning part of our business",
-  heroBg: "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=1600",
+  heroBg: "",
   // Keeping other categories for completeness but they are not rendered
   lamb: [],
   mutton: [],

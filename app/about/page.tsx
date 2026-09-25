@@ -10,10 +10,10 @@ import { AboutContent } from "@/types/content";
 const defaults: AboutContent = {
   heroHeading: "Welcome to Pak Mecca Meats Ltd",
   heroSubheading: "A Tradition of Quality Since 1980",
-  heroBg: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=1600",
+  heroBg: "https://i.postimg.cc/F15n2FtN/j98NTi-V-(1).webp",
   whoWeAreBody:
     "Pak Mecca Meats Ltd is a Birmingham-based supplier of premium British halal lamb and mutton carcasses, founded in 1980. As a family-owned business built on customer-centric values, we have grown into a powerhouse of the UK halal meat industry. Our specialist facilities in Birmingham enable us to process 15,000–20,000 carcasses per week. With over 150 dedicated colleagues working in our plant, we serve communities in the UK, mainland Europe, the Middle East and beyond.",
-  whoWeAreImg: "https://images.unsplash.com/photo-1551782450-17144efb9c50?w=800",
+  whoWeAreImg: "https://i.postimg.cc/F15n2FtN/j98NTi-V-(1).webp",
   historyImg: "https://images.unsplash.com/photo-1528607929212-2636ec44253e?w=800",
   timeline: [
     {

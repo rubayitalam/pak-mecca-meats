@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -21,6 +22,7 @@ export default function HeroSection({
   heading,
   subheading,
   bodyText,
+  bgImage,
   primaryBtnText,
   primaryBtnLink,
   secondaryBtnText,
@@ -94,6 +96,19 @@ export default function HeroSection({
     <section className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-[#1A1A1A]">
       {/* Background Layers */}
       <div className="absolute inset-0 z-0">
+        {/* Background Image (optimized with Next.js Image & priority) */}
+        {bgImage && !videoUrl && (
+          <Image
+            src={bgImage}
+            alt={heading}
+            fill
+            priority
+            sizes="100vw"
+            quality={75}
+            className="object-cover object-center"
+          />
+        )}
+
         {/* Video Background */}
          {videoUrl && (
            <video
@@ -120,7 +135,7 @@ export default function HeroSection({
         {/* Dark Overlay */}
         <div
           className={`absolute inset-0 transition-colors duration-1000 ease-in-out ${
-            showVideo ? "bg-black/0" : "bg-black/30"
+            showVideo ? "bg-black/0" : "bg-black/50"
           }`}
         />
       </div>

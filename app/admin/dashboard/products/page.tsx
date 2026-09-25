@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 const defaults: ProductsContent = {
   heroHeading: "Our Products",
   heroSubheading: "An award winning part of our business",
-  heroBg: "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=1600",
+  heroBg: "",
   lamb: [
     { name: "LAMB LEG [BONE-IN]", description: "Each bone-in lamb leg is vacuum-packed and boxed.", image: "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=400" },
     { name: "LAMB PAIRED LEGS", description: "Over wrapped and placed in a meat container, weighed together or individually labelled.", image: "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=400" },

@@ -112,3 +112,36 @@ export interface MediaContent {
   blogs: BlogEntry[];
 }
 
+export interface CultureReview {
+  name: string;
+  message: string;
+  image?: string;
+}
+
+export interface CultureGalleryImage {
+  url: string;
+  caption?: string;
+}
+
+export interface CultureContent {
+  heroHeading: string;
+  heroSubheading: string;
+  heroBg: string;
+  
+  workCultureHeading: string;
+  workCultureBody: string;
+  workCultureImages: CultureGalleryImage[];
+  
+  communityHeading: string;
+  communityBody: string;
+  communityImages: CultureGalleryImage[];
+  
+  womenHeading: string;
+  womenBody: string;
+  womenImages: CultureGalleryImage[];
+  
+  reviews: CultureReview[];
+  
+  stats: { number: string; label: string; }[];
+}
+

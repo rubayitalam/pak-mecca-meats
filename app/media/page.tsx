@@ -11,7 +11,7 @@ import { ArrowUpRight, Play } from "lucide-react";
 const defaults: MediaContent = {
   heroHeading: "Media & Press",
   heroSubheading: "Latest Updates and Social Highlights",
-  heroBg: "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1600",
+  heroBg: "",
   instagramPosts: [
     {
       url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",

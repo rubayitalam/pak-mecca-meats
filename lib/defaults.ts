@@ -181,7 +181,7 @@ export const defaultCommunity: CommunityContent = {
       quote:
         "Thank you both so so much for your kindness today. Everything went very well we had 60 women victims of domestic violence celebrating World Women's Day. It was very nice to be able to provide a little bit of joy to this vulnerable group.",
       quoteAuthor: "Alan & Katherine",
-      image: "",
+      image: "https://images.unsplash.com/photo-1593113598332-cd288d649433?w=800",
     },
     {
       heading: "Community Impact",
@@ -191,7 +191,7 @@ export const defaultCommunity: CommunityContent = {
       quote:
         "On behalf of Katherine myself and our charities Let's Feed Brum and the Refugee Run Club I just wanted to thank you and everyone at Pak Mecca for all your incredible support. We had a wonderful day supporting those in need and giving them a day to remember.",
       quoteAuthor: "Alan — Let's Feed Brum & Refugee Run Club",
-      image: "",
+      image: "https://images.unsplash.com/photo-1542810634-71277d95dcbb?w=800",
     },
   ],
   reviews: [
@@ -199,16 +199,25 @@ export const defaultCommunity: CommunityContent = {
       name: "Alan & Katherine — Let's Feed Brum",
       message:
         "Wow - Adeela and Aman. Thank you so so very much for all your kindness support and generosity. The meal you provided us today to support the women and children survivors of domestic abuse and violence was perfect. Everyone enjoyed it and are grateful for all your support. Thanks again for everything. Much love.",
+      image: "https://images.unsplash.com/photo-1593113598332-cd288d649433?w=600",
     },
     {
       name: "Alan & Katherine",
       message:
         "Thank you both so so much for your kindness today. Everything went very well we had 60 women victims of domestic violence celebrating World Women's Day. It was very nice to be able to provide a little bit of joy to this vulnerable group. Thank you for all your kind support. Much love.",
+      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600",
     },
     {
       name: "Alan — Let's Feed Brum & Refugee Run Club",
       message:
         "On behalf of Katherine myself and our charities Let's Feed Brum and the Refugee Run Club I just wanted to thank you and everyone at Pak Mecca for all your incredible support. We had a wonderful day supporting those in need and giving them a day to remember. Thank you for all your kindness.",
+      image: "https://images.unsplash.com/photo-1542810634-71277d95dcbb?w=600",
     },
+  ],
+  galleryImages: [
+    "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=800",
+    "https://images.unsplash.com/photo-1593113598332-cd288d649433?w=800",
+    "https://images.unsplash.com/photo-1542810634-71277d95dcbb?w=800",
+    "https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=800",
   ],
 };

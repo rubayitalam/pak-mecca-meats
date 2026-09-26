@@ -225,7 +225,8 @@ export interface CommunityContent {
   heroBg: string;
   introText: string;
   charitySections: CommunityCharitySection[];
-  reviews: { name: string; message: string; }[];
+  reviews: { name: string; message: string; image?: string; }[];
+  galleryImages?: string[];
 }
 
 

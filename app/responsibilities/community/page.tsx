@@ -24,6 +24,7 @@ export default function CommunityResponsibilityPage() {
           introText: dbData.introText || defaultCommunity.introText,
           charitySections: dbData.charitySections || defaultCommunity.charitySections,
           reviews: dbData.reviews || defaultCommunity.reviews,
+          galleryImages: dbData.galleryImages || defaultCommunity.galleryImages,
         });
       }
     }
@@ -115,7 +116,7 @@ export default function CommunityResponsibilityPage() {
                     }`}
                   >
                     {sec.image ? (
-                      <div className="relative h-72 sm:h-96 w-full rounded-xl overflow-hidden shadow-lg">
+                      <div className="relative h-72 sm:h-96 w-full rounded-xl overflow-hidden shadow-lg border border-gray-100">
                         <Image
                           src={sec.image}
                           alt={sec.heading}
@@ -141,6 +142,42 @@ export default function CommunityResponsibilityPage() {
           );
         })}
       </div>
+
+      {/* Community Photo Gallery Grid */}
+      {content.galleryImages && content.galleryImages.filter(Boolean).length > 0 && (
+        <section className="py-20 bg-white border-b border-gray-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 xl:px-24">
+            <div className="text-center max-w-2xl mx-auto mb-12">
+              <span className="text-[#C8A400] text-xs font-bold uppercase tracking-widest block mb-2">
+                COMMUNITY IN ACTION
+              </span>
+              <h2 className="text-2xl sm:text-4xl font-light text-brand-dark tracking-wide">
+                Moments &amp; Partnerships
+              </h2>
+              <div className="h-[1px] w-20 bg-[#C8A400] mx-auto mt-4" />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {content.galleryImages.filter(Boolean).map((imgUrl, i) => (
+                <div key={i} className="relative h-64 rounded-xl overflow-hidden shadow-md group border border-gray-100">
+                  <Image
+                    src={imgUrl}
+                    alt={`Community action ${i + 1}`}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                    <span className="text-white text-xs uppercase tracking-widest font-semibold">
+                      Community Partner #{i + 1}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Reviews / Gratitude Messages Section (Dark #1A1A1A, Gold Accents) */}
       <section className="py-20 sm:py-32 bg-[#1A1A1A] text-white border-t border-[#C8A400]/20">
@@ -176,10 +213,27 @@ export default function CommunityResponsibilityPage() {
                     </p>
                   </div>
 
-                  <div className="mt-8 pt-4 border-t border-white/10">
-                    <span className="text-[#C8A400] text-xs font-bold uppercase tracking-widest block">
-                      {rev.name}
-                    </span>
+                  <div className="flex items-center space-x-3 mt-8 pt-4 border-t border-white/10">
+                    {rev.image ? (
+                      <div className="relative w-10 h-10 rounded-full overflow-hidden shrink-0 border border-[#C8A400]/40">
+                        <Image
+                          src={rev.image}
+                          alt={rev.name}
+                          fill
+                          sizes="40px"
+                          className="object-cover"
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-[#C8A400]/20 text-[#C8A400] flex items-center justify-center font-bold text-sm shrink-0 border border-[#C8A400]/40">
+                        {rev.name.charAt(0)}
+                      </div>
+                    )}
+                    <div>
+                      <span className="text-[#C8A400] text-xs font-bold uppercase tracking-widest block leading-tight">
+                        {rev.name}
+                      </span>
+                    </div>
                   </div>
                 </motion.div>
               ))}

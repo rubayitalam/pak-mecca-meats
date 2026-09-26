@@ -23,6 +23,7 @@ export default function AdminCommunityPage() {
           introText: dbData.introText || defaultCommunity.introText,
           charitySections: dbData.charitySections || defaultCommunity.charitySections,
           reviews: dbData.reviews || defaultCommunity.reviews,
+          galleryImages: dbData.galleryImages || defaultCommunity.galleryImages,
         });
       }
       setLoading(false);
@@ -77,6 +78,29 @@ export default function AdminCommunityPage() {
     });
   };
 
+  // Gallery Images helpers
+  const handleAddGalleryImage = () => {
+    setData((prev) => ({
+      ...prev,
+      galleryImages: [...(prev.galleryImages || []), ""],
+    }));
+  };
+
+  const handleRemoveGalleryImage = (index: number) => {
+    setData((prev) => ({
+      ...prev,
+      galleryImages: (prev.galleryImages || []).filter((_, idx) => idx !== index),
+    }));
+  };
+
+  const handleUpdateGalleryImage = (index: number, val: string) => {
+    setData((prev) => {
+      const updated = [...(prev.galleryImages || [])];
+      updated[index] = val;
+      return { ...prev, galleryImages: updated };
+    });
+  };
+
   // Review helpers
   const handleAddReview = () => {
     setData((prev) => ({
@@ -97,7 +121,7 @@ export default function AdminCommunityPage() {
 
   const handleUpdateReview = (
     index: number,
-    field: "name" | "message",
+    field: "name" | "message" | "image",
     val: string
   ) => {
     setData((prev) => {
@@ -123,7 +147,7 @@ export default function AdminCommunityPage() {
             Community Responsibility Editor
           </h1>
           <p className="text-gray-500 text-sm mt-1">
-            Manage hero section, intro statement, charity initiative blocks, quotes, stats, and reviews.
+            Manage hero section, intro statement, charity initiative blocks, photo gallery images, stats, and reviews.
           </p>
         </div>
         <button
@@ -204,7 +228,7 @@ export default function AdminCommunityPage() {
               <Heart className="w-5 h-5 text-brand-green" /> 3. Charity &amp; Community Sections ({data.charitySections.length})
             </h2>
             <p className="text-xs text-gray-500 mt-0.5">
-              Includes heading, narrative body, highlighted stat box, pull quote, and image URL.
+              Includes heading, narrative body, highlighted stat box, pull quote, and initiative image URL.
             </p>
           </div>
           <button
@@ -323,7 +347,7 @@ export default function AdminCommunityPage() {
 
               <div>
                 <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1">
-                  Image URL (Optional)
+                  Initiative Image URL
                 </label>
                 <input
                   type="text"
@@ -340,11 +364,64 @@ export default function AdminCommunityPage() {
         </div>
       </div>
 
-      {/* 4. REVIEWS EDITOR */}
+      {/* 4. COMMUNITY PHOTO GALLERY IMAGES */}
+      <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm space-y-4">
+        <div className="flex justify-between items-center border-b pb-2">
+          <div>
+            <h2 className="text-lg font-bold text-brand-dark flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-[#C8A400]" /> 4. Community Photo Gallery Images ({data.galleryImages?.length || 0})
+            </h2>
+            <p className="text-xs text-gray-500 mt-0.5">
+              Add image URLs to display in the Community in Action photo grid on the public page.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={handleAddGalleryImage}
+            className="px-3 py-1.5 bg-brand-green hover:bg-brand-green/90 text-white rounded text-xs font-bold tracking-wider uppercase flex items-center gap-1"
+          >
+            <Plus className="w-3.5 h-3.5" /> Add Image URL
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {(data.galleryImages || []).map((imgUrl, idx) => (
+            <div key={idx} className="p-4 bg-gray-50 border rounded-lg space-y-2 relative">
+              <div className="flex justify-between items-center">
+                <span className="text-xs font-bold text-[#C8A400] uppercase">
+                  Image #{idx + 1}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => handleRemoveGalleryImage(idx)}
+                  className="text-brand-red hover:bg-brand-red/10 px-2 py-1 rounded text-xs font-bold uppercase tracking-wider flex items-center gap-1"
+                >
+                  <Trash className="w-3.5 h-3.5" /> Remove
+                </button>
+              </div>
+              <input
+                type="text"
+                value={imgUrl}
+                onChange={(e) => handleUpdateGalleryImage(idx, e.target.value)}
+                placeholder="https://images.unsplash.com/..."
+                className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-xs bg-white text-brand-dark"
+              />
+              {imgUrl && (
+                <div className="relative h-28 w-full rounded overflow-hidden border border-gray-200 mt-2 bg-gray-100">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={imgUrl} alt={`Community photo ${idx + 1}`} className="w-full h-full object-cover" />
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 5. REVIEWS / MESSAGES OF GRATITUDE EDITOR */}
       <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm space-y-4">
         <div className="flex justify-between items-center border-b pb-2">
           <h2 className="text-lg font-bold text-brand-dark flex items-center gap-2">
-            <MessageSquare className="w-5 h-5 text-brand-green" /> 4. Messages of Gratitude
+            <MessageSquare className="w-5 h-5 text-brand-green" /> 5. Messages of Gratitude
           </h2>
           <button
             type="button"
@@ -391,6 +468,24 @@ export default function AdminCommunityPage() {
                   onChange={(e) => handleUpdateReview(idx, "message", e.target.value)}
                   className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-xs text-brand-dark bg-white"
                 />
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1">
+                  Author / Event Image URL (Optional)
+                </label>
+                <input
+                  type="text"
+                  value={rev.image || ""}
+                  onChange={(e) => handleUpdateReview(idx, "image", e.target.value)}
+                  placeholder="https://..."
+                  className="w-full px-3 py-2 border rounded focus:outline-none focus:border-brand-green text-xs bg-white text-brand-dark"
+                />
+                {rev.image && (
+                  <div className="relative h-16 w-16 rounded-full overflow-hidden border border-gray-200 mt-2 bg-gray-100">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={rev.image} alt={rev.name} className="w-full h-full object-cover" />
+                  </div>
+                )}
               </div>
             </div>
           ))}

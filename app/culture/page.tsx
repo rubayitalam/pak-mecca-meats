@@ -97,17 +97,17 @@ export default function CulturePage() {
         bgImage={content.heroBg}
       />
 
-      {/* SECTION 2: OUR WORK CULTURE (Light Bg #FAFAFA) */}
-      <section className="py-20 lg:py-32 bg-[#FAFAFA]">
+      {/* SECTION 2: OUR WORK CULTURE */}
+      <section className="py-16 sm:py-20 lg:py-32 bg-[#FAFAFA]">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 xl:px-24">
           <div className="max-w-3xl mb-12">
             <span className="text-[#C8A400] text-xs font-bold uppercase tracking-widest block mb-2">
               OUR PEOPLE
             </span>
-            <h2 className="text-3xl sm:text-4xl font-light text-brand-dark tracking-wide">
+            <h2 className="text-2xl sm:text-4xl font-light text-brand-dark tracking-wide">
               {content.workCultureHeading}
             </h2>
-            <div className="h-[1px] w-20 bg-[#C8A400] mt-4 mb-8" />
+            <div className="h-[1px] w-20 bg-[#C8A400] mt-4 mb-6 sm:mb-8" />
             <p className="text-gray-600 text-sm sm:text-base font-light leading-relaxed whitespace-pre-line">
               {content.workCultureBody}
             </p>
@@ -126,16 +126,16 @@ export default function CulturePage() {
                     duration: 0.5,
                     delay: shouldReduceMotion ? 0 : (idx % 3) * 0.1,
                   }}
-                  className="group bg-white border border-[#C8A400]/20 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col"
+                  className="group bg-white border border-[#C8A400]/20 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col max-w-full"
                 >
-                  <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-neutral-900">
+                  <div className="relative h-64 sm:h-72 w-full max-w-full overflow-hidden bg-neutral-900">
                     <Image
                       src={imgItem.url}
                       alt={imgItem.caption || "Pak Mecca Work Culture"}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       quality={75}
-                      className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                      className="object-cover w-full h-full max-w-full group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
                   {imgItem.caption && (
@@ -152,10 +152,10 @@ export default function CulturePage() {
         </div>
       </section>
 
-      {/* SECTION 3: STATS BAR (Green Strip #1B5E20 - Mobile Responsive Grid) */}
-      <section className="bg-[#1B5E20] py-10 border-y border-[#C8A400]/20">
+      {/* SECTION 3: STATS BAR */}
+      <section className="bg-[#1B5E20] py-8 sm:py-10 border-y border-[#C8A400]/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 xl:px-24">
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-6 lg:gap-2 text-white divide-y-0 lg:divide-x divide-white/10">
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4 sm:gap-6 lg:gap-2 text-white divide-y-0 lg:divide-x divide-white/10">
             {content.stats.map((stat, index) => (
               <motion.div
                 key={index}
@@ -168,7 +168,7 @@ export default function CulturePage() {
                 }}
                 className="flex flex-col items-center justify-center text-center px-2 py-1"
               >
-                <span className="text-2xl sm:text-3xl font-light text-[#C8A400] leading-tight mb-1.5 whitespace-nowrap">
+                <span className="text-xl sm:text-3xl font-light text-[#C8A400] leading-tight mb-1 whitespace-nowrap">
                   {stat.number}
                 </span>
                 <span className="text-[10px] sm:text-[11px] uppercase tracking-widest font-medium text-gray-200 leading-snug max-w-[130px]">
@@ -180,17 +180,17 @@ export default function CulturePage() {
         </div>
       </section>
 
-      {/* SECTION 4: LOOKING AFTER OUR COMMUNITY (White Bg) */}
-      <section className="py-20 lg:py-32 bg-white">
+      {/* SECTION 4: COMMUNITY */}
+      <section className="py-16 sm:py-20 lg:py-32 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 xl:px-24">
           <div className="max-w-3xl mb-12">
             <span className="text-[#C8A400] text-xs font-bold uppercase tracking-widest block mb-2">
               COMMUNITY
             </span>
-            <h2 className="text-3xl sm:text-4xl font-light text-brand-dark tracking-wide">
+            <h2 className="text-2xl sm:text-4xl font-light text-brand-dark tracking-wide">
               {content.communityHeading}
             </h2>
-            <div className="h-[1px] w-20 bg-[#C8A400] mt-4 mb-8" />
+            <div className="h-[1px] w-20 bg-[#C8A400] mt-4 mb-6 sm:mb-8" />
             <p className="text-gray-600 text-sm sm:text-base font-light leading-relaxed whitespace-pre-line">
               {content.communityBody}
             </p>
@@ -209,16 +209,16 @@ export default function CulturePage() {
                     duration: 0.5,
                     delay: shouldReduceMotion ? 0 : (idx % 3) * 0.1,
                   }}
-                  className="group bg-white border border-[#C8A400]/20 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col"
+                  className="group bg-white border border-[#C8A400]/20 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col max-w-full"
                 >
-                  <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-neutral-900">
+                  <div className="relative h-64 sm:h-72 w-full max-w-full overflow-hidden bg-neutral-900">
                     <Image
                       src={imgItem.url}
                       alt={imgItem.caption || "Community Support"}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       quality={75}
-                      className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                      className="object-cover w-full h-full max-w-full group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
                   {imgItem.caption && (
@@ -235,17 +235,17 @@ export default function CulturePage() {
         </div>
       </section>
 
-      {/* SECTION 5: SUPPORTING WOMEN (Dark #1A1A1A Bg, Gold Accents) */}
-      <section className="py-20 lg:py-32 bg-[#1A1A1A] text-white border-y border-[#C8A400]/20">
+      {/* SECTION 5: SUPPORTING WOMEN */}
+      <section className="py-16 sm:py-20 lg:py-32 bg-[#1A1A1A] text-white border-y border-[#C8A400]/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 xl:px-24">
           <div className="max-w-3xl mb-12">
             <span className="text-[#C8A400] text-xs font-bold uppercase tracking-widest block mb-2">
               GIVING BACK
             </span>
-            <h2 className="text-3xl sm:text-4xl font-light text-white tracking-wide">
+            <h2 className="text-2xl sm:text-4xl font-light text-white tracking-wide">
               {content.womenHeading}
             </h2>
-            <div className="h-[1px] w-20 bg-[#C8A400] mt-4 mb-8" />
+            <div className="h-[1px] w-20 bg-[#C8A400] mt-4 mb-6 sm:mb-8" />
             <p className="text-gray-300 text-sm sm:text-base font-light leading-relaxed whitespace-pre-line">
               {content.womenBody}
             </p>
@@ -264,16 +264,16 @@ export default function CulturePage() {
                     duration: 0.5,
                     delay: shouldReduceMotion ? 0 : (idx % 3) * 0.1,
                   }}
-                  className="group bg-[#151515] border border-[#C8A400]/30 overflow-hidden shadow-xl hover:border-[#C8A400] transition-all duration-300 flex flex-col"
+                  className="group bg-[#151515] border border-[#C8A400]/30 overflow-hidden shadow-xl hover:border-[#C8A400] transition-all duration-300 flex flex-col max-w-full"
                 >
-                  <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-neutral-900">
+                  <div className="relative h-64 sm:h-72 w-full max-w-full overflow-hidden bg-neutral-900">
                     <Image
                       src={imgItem.url}
                       alt={imgItem.caption || "Supporting Women in Our Community"}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       quality={75}
-                      className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                      className="object-cover w-full h-full max-w-full group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
                   {imgItem.caption && (
@@ -290,21 +290,21 @@ export default function CulturePage() {
         </div>
       </section>
 
-      {/* SECTION 6: CUSTOMER REVIEWS & MESSAGES (White Bg) */}
-      <section className="py-20 lg:py-32 bg-white">
+      {/* SECTION 6: REVIEWS */}
+      <section className="py-16 sm:py-20 lg:py-32 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 xl:px-24">
-          <div className="max-w-2xl mb-16 text-center md:text-left">
+          <div className="max-w-2xl mb-12 sm:mb-16 text-center md:text-left">
             <span className="text-[#C8A400] text-xs font-bold uppercase tracking-widest block mb-2">
               MESSAGES OF GRATITUDE
             </span>
-            <h2 className="text-3xl sm:text-4xl font-light text-brand-dark tracking-wide">
+            <h2 className="text-2xl sm:text-4xl font-light text-brand-dark tracking-wide">
               Words From Those We&apos;ve Supported
             </h2>
             <div className="h-[1px] w-20 bg-[#C8A400] mt-4 hidden md:block" />
           </div>
 
           {content.reviews && content.reviews.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
               {content.reviews.map((rev, index) => (
                 <motion.div
                   key={index}
@@ -315,18 +315,17 @@ export default function CulturePage() {
                     duration: 0.5,
                     delay: shouldReduceMotion ? 0 : (index % 3) * 0.15,
                   }}
-                  className="bg-[#1A1A1A] border border-[#C8A400]/20 overflow-hidden flex flex-col justify-between h-full group hover:border-[#C8A400] transition-all duration-300 shadow-xl p-8 text-white relative"
+                  className="bg-[#1A1A1A] border border-[#C8A400]/20 overflow-hidden flex flex-col justify-between h-full group hover:border-[#C8A400] transition-all duration-300 shadow-xl p-6 sm:p-8 text-white relative max-w-full"
                 >
-                  {/* Optional Image Banner if added by admin in dashboard */}
                   {rev.image && (
-                    <div className="relative mb-6 -mx-8 -mt-8 h-48 overflow-hidden bg-neutral-900">
+                    <div className="relative mb-6 -mx-6 -mt-6 sm:-mx-8 sm:-mt-8 h-48 overflow-hidden bg-neutral-900 max-w-full">
                       <Image
                         src={rev.image}
                         alt={rev.name}
                         fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         quality={75}
-                        className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                        className="object-cover w-full h-full max-w-full group-hover:scale-105 transition-transform duration-500"
                       />
                     </div>
                   )}
@@ -354,16 +353,16 @@ export default function CulturePage() {
         </div>
       </section>
 
-      {/* SECTION 7: WORKING TOGETHER CTA (Dark Bg #1A1A1A) */}
-      <section className="py-24 bg-[#1A1A1A] text-white border-t border-[#C8A400]/20 text-center relative overflow-hidden">
+      {/* SECTION 7: CTA */}
+      <section className="py-20 sm:py-24 bg-[#1A1A1A] text-white border-t border-[#C8A400]/20 text-center relative overflow-hidden">
         <div className="max-w-4xl mx-auto px-4 sm:px-8">
           <span className="text-[#C8A400] text-xs font-bold uppercase tracking-widest block mb-3">
             TOGETHER WE GROW
           </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-light tracking-wide uppercase mb-6 text-white">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-light tracking-wide uppercase mb-6 text-white">
             Working Together For A Better Tomorrow
           </h2>
-          <p className="text-gray-400 text-sm sm:text-base font-light leading-relaxed max-w-2xl mx-auto mb-10">
+          <p className="text-gray-400 text-sm sm:text-base font-light leading-relaxed max-w-2xl mx-auto mb-8 sm:mb-10">
             We believe in the power of community, mutual respect, and giving back.
             Whether you are looking to collaborate, partner with us on charitable initiatives,
             or learn more about our team, we would love to hear from you.

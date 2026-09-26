@@ -145,3 +145,47 @@ export interface CultureContent {
   stats: { number: string; label: string; }[];
 }
 
+export interface WhoWeAreContent {
+  heroHeading: string;
+  heroSubheading: string;
+  heroBg: string;
+  mainHeading: string;
+  mainBody: string;
+  mainImage: string;
+  trustedHeading: string;
+  trustedBody: string;
+  trustedImage: string;
+  valueCards: { title: string }[];
+  valueBullets: string[];
+}
+
+export interface AtAGlanceContent {
+  heroHeading: string;
+  heroSubheading: string;
+  heroBg: string;
+  stats: StatItem[];
+}
+
+export interface HistoryMilestone {
+  year: string;
+  title: string;
+  body: string;
+  image?: string;
+}
+
+export interface HistoryContent {
+  heroHeading: string;
+  heroSubheading: string;
+  heroBg: string;
+  timeline: HistoryMilestone[];
+}
+
+export interface ValuesContent {
+  heroHeading: string;
+  heroSubheading: string;
+  heroBg: string;
+  valueCards: { title: string }[];
+  valueBullets: string[];
+}
+
+

@@ -16,6 +16,11 @@ export interface StatItem {
   label: string;
 }
 
+export interface AwardItem {
+  imageUrl: string;
+  title?: string;
+}
+
 export interface HomeContent {
   heroHeading: string;
   heroSubheading: string;
@@ -27,6 +32,8 @@ export interface HomeContent {
   aboutImg: string;
   stats: StatItem[];
   productsPreview: ProductPreviewItem[];
+  awardsHeading?: string;
+  awards?: AwardItem[];
 }
 
 export interface ValueCard {
@@ -187,5 +194,39 @@ export interface ValuesContent {
   valueCards: { title: string }[];
   valueBullets: string[];
 }
+
+export interface FoodSafetySection {
+  heading: string;
+  body: string;
+  image: string;
+}
+
+export interface FoodSafetyContent {
+  heroHeading: string;
+  heroSubheading: string;
+  heroBg: string;
+  missionStatement: string;
+  sections: FoodSafetySection[];
+}
+
+export interface CommunityCharitySection {
+  heading: string;
+  body: string;
+  stat: string;
+  statLabel: string;
+  quote: string;
+  quoteAuthor: string;
+  image: string;
+}
+
+export interface CommunityContent {
+  heroHeading: string;
+  heroSubheading: string;
+  heroBg: string;
+  introText: string;
+  charitySections: CommunityCharitySection[];
+  reviews: { name: string; message: string; }[];
+}
+
 
 

@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import HeroSection from "@/components/HeroSection";
 import ContentBlock from "@/components/ContentBlock";
 import ProductCard from "@/components/ProductCard";
-// import VideoSection from "@/components/VideoSection"; // removed, video handled in HeroSection
 import { motion, useReducedMotion } from "framer-motion";
 import { getPageContent } from "@/lib/firestore";
 import { HomeContent } from "@/types/content";
+import { defaultAwards } from "@/lib/defaults";
 
 interface ExtendedHomeContent extends HomeContent {
   heroVideo?: {
@@ -85,6 +85,8 @@ const defaults: ExtendedHomeContent = {
       link: "/products",
     },
   ],
+  awardsHeading: "Our latest awards and wins:",
+  awards: defaultAwards,
 };
 
 const certs = [
@@ -129,6 +131,8 @@ export default function Home() {
           aboutImg: dbContent.aboutImg || defaults.aboutImg,
           stats: dbContent.stats || defaults.stats,
           productsPreview: dbContent.productsPreview || defaults.productsPreview,
+          awardsHeading: dbContent.awardsHeading || defaults.awardsHeading,
+          awards: dbContent.awards && dbContent.awards.length > 0 ? dbContent.awards : defaults.awards,
           heroVideo: dbContent.heroVideo ? {
             heading: dbContent.heroVideo.heading ?? defaults.heroVideo?.heading,
             subtext: dbContent.heroVideo.subtext ?? defaults.heroVideo?.subtext,
@@ -148,6 +152,10 @@ export default function Home() {
     return <div className="min-h-screen bg-[#1A1A1A]" />;
   }
 
+  const awardsList = content.awards && content.awards.length > 0 ? content.awards : defaultAwards;
+  // Duplicate array for seamless infinite marquee scrolling
+  const marqueeAwards = [...awardsList, ...awardsList, ...awardsList, ...awardsList];
+
   return (
     <div className="flex flex-col min-h-screen bg-white">
       {/* Hero */}
@@ -163,9 +171,7 @@ export default function Home() {
         videoUrl={content.heroVideo?.videoUrl ?? ""}
       />
 
-
-
-      {/* Editorial Alternating Features (Replacing Feature Cards) */}
+      {/* Editorial Alternating Features */}
       <div className="flex flex-col">
         {content.features?.[0] && (
           <ContentBlock
@@ -216,7 +222,7 @@ export default function Home() {
         />
       </div>
 
-      {/* Stats Bar (Flat green horizontal strip, not cards) */}
+      {/* Stats Bar */}
       <section className="bg-[#1B5E20] py-10 border-y border-[#C8A400]/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 xl:px-24">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-white divide-y lg:divide-y-0 lg:divide-x divide-white/10">
@@ -241,7 +247,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Products Preview Section (Flat Editorial Style) */}
+      {/* Products Preview Section */}
       <section className="py-20 lg:py-32 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 xl:px-24">
           <div className="max-w-2xl mb-16">
@@ -281,7 +287,7 @@ export default function Home() {
               </div>
             ))}
           </div>
-          {/* Duplicate to create a seamless continuous scroll effect */}
+          {/* Duplicate for continuous marquee */}
           <div className="flex animate-marquee min-w-full shrink-0 items-center justify-around gap-8" aria-hidden="true">
             {certs.map((badge, index) => (
               <div
@@ -306,12 +312,73 @@ export default function Home() {
           .animate-marquee {
             animation: marquee 25s linear infinite;
           }
-          /* Pause animation on hover */
           .animate-marquee:hover {
             animation-play-state: paused;
           }
           @media (prefers-reduced-motion: reduce) {
             .animate-marquee {
+              animation: none;
+              overflow-x: auto;
+              width: 100%;
+              justify-content: center;
+              flex-wrap: wrap;
+            }
+          }
+        `}</style>
+      </section>
+
+      {/* AWARDS & WINS SECTION (Positioned right at bottom before Footer, sliding Left to Right) */}
+      <section className="py-16 sm:py-20 bg-[#F4F4F6] border-t border-gray-200 overflow-hidden relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 text-center mb-8 sm:mb-10">
+          <h2 className="font-serif text-2xl sm:text-3xl text-gray-700 tracking-wide font-normal">
+            {content.awardsHeading || "Our latest awards and wins:"}
+          </h2>
+        </div>
+
+        {/* Horizontal Infinite Marquee Carousel (Moving Left to Right) */}
+        <div className="w-full flex select-none overflow-hidden relative py-2">
+          <div className="flex animate-awards-marquee-ltr shrink-0 items-center justify-around gap-6 sm:gap-10">
+            {marqueeAwards.map((item, index) => (
+              <div
+                key={index}
+                className="relative h-28 sm:h-36 w-44 sm:w-56 shrink-0 flex items-center justify-center p-2 rounded-lg bg-transparent transition-transform duration-300 hover:scale-105"
+              >
+                {item.imageUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={appendTimestamp(item.imageUrl, imgTimestamp)}
+                    alt={item.title || "Award Badge"}
+                    className="max-h-full max-w-full object-contain drop-shadow-md"
+                  />
+                ) : (
+                  <div className="h-full w-full bg-gray-900 border border-gray-800 rounded flex flex-col justify-center items-center text-center p-3 text-white">
+                    <span className="text-xs font-bold text-[#C8A400] uppercase">
+                      {item.title || "Award Winner"}
+                    </span>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <style>{`
+          @keyframes awardsMarqueeLtr {
+            0% {
+              transform: translateX(-50%);
+            }
+            100% {
+              transform: translateX(0%);
+            }
+          }
+          .animate-awards-marquee-ltr {
+            animation: awardsMarqueeLtr 30s linear infinite;
+          }
+          .animate-awards-marquee-ltr:hover {
+            animation-play-state: paused;
+          }
+          @media (prefers-reduced-motion: reduce) {
+            .animate-awards-marquee-ltr {
               animation: none;
               overflow-x: auto;
               width: 100%;

@@ -27,12 +27,18 @@ const aboutSubItems: SubMenuItem[] = [
   { name: "Our Culture", href: "/culture" },
 ];
 
+const responsibilitiesSubItems: SubMenuItem[] = [
+  { name: "Food Safety & Nutrition", href: "/responsibilities/food-safety" },
+  { name: "Looking After Our Community", href: "/responsibilities/community" },
+];
+
+// Sequence: Home -> About -> Products -> Responsibilities -> Assurance -> Media -> Contact
 const navLinks: NavItem[] = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about", subItems: aboutSubItems },
   { name: "Products", href: "/products" },
+  { name: "Responsibilities", href: "/responsibilities/food-safety", subItems: responsibilitiesSubItems },
   { name: "Assurance", href: "/assurance" },
-  { name: "Culture", href: "/culture" },
   { name: "Media", href: "/media" },
   { name: "Contact", href: "/contact" },
 ];
@@ -40,7 +46,7 @@ const navLinks: NavItem[] = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [aboutOpen, setAboutOpen] = useState(false);
+  const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const pathname = usePathname();
   const settings = useSiteSettings();
   const shouldReduceMotion = useReducedMotion();
@@ -60,6 +66,7 @@ export default function Navbar() {
 
   useEffect(() => {
     setIsOpen(false);
+    setOpenSubmenu(null);
   }, [pathname]);
 
   const overlayVariants = {
@@ -100,15 +107,21 @@ export default function Navbar() {
   const isAboutActive =
     pathname === "/about" ||
     pathname.startsWith("/about/") ||
-    (pathname === "/culture" && aboutOpen);
+    (pathname === "/culture" && openSubmenu === "About");
+
+  const isRespActive = pathname.startsWith("/responsibilities");
 
   return (
     <header
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        scrolled ? "bg-[#1A1A1A] shadow-lg" : "bg-transparent"
+        isOpen || scrolled ? "bg-[#1A1A1A] shadow-lg" : "bg-transparent"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 xl:px-24 h-20 md:h-24 flex items-center relative justify-between">
+      <div
+        className={`max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 xl:px-24 flex items-center relative justify-between transition-all duration-300 ${
+          isOpen ? "h-24 md:h-32" : "h-20 md:h-24"
+        }`}
+      >
         {/* Left Side: MENU text/button */}
         <div className="flex-1 flex justify-start z-50">
           <button
@@ -161,25 +174,29 @@ export default function Navbar() {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="fixed inset-0 w-full bg-[#1A1A1A] z-40 overflow-y-auto flex flex-col justify-start items-center pt-[120px] pb-16 px-4 sm:px-6"
+            className="fixed inset-0 w-full bg-[#1A1A1A] z-40 overflow-y-auto flex flex-col justify-start items-center pt-32 sm:pt-40 md:pt-44 pb-20 px-6"
           >
             <nav className="flex flex-col space-y-6 md:space-y-8 text-center max-w-xl w-full">
               {navLinks.map((link) => {
                 if (link.subItems) {
+                  const isSubOpen = openSubmenu === link.name;
+                  const isItemActive =
+                    link.name === "About" ? isAboutActive : isRespActive;
+
                   return (
                     <motion.div
                       key={link.name}
                       variants={linkVariants}
                       className="relative flex flex-col items-center"
-                      onMouseEnter={() => setAboutOpen(true)}
-                      onMouseLeave={() => setAboutOpen(false)}
+                      onMouseEnter={() => setOpenSubmenu(link.name)}
+                      onMouseLeave={() => setOpenSubmenu(null)}
                     >
                       <div className="flex items-center justify-center gap-2 cursor-pointer group">
                         <Link
                           href={link.href}
                           onClick={() => setIsOpen(false)}
-                          className={`text-2xl sm:text-4xl md:text-5xl uppercase tracking-widest font-light transition-colors duration-300 ${
-                            isAboutActive
+                          className={`text-3xl sm:text-4xl md:text-5xl uppercase tracking-widest font-light transition-colors duration-300 ${
+                            isItemActive
                               ? "text-[#C8A400]"
                               : "text-white group-hover:text-[#C8A400]"
                           }`}
@@ -191,14 +208,14 @@ export default function Navbar() {
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            setAboutOpen(!aboutOpen);
+                            setOpenSubmenu(isSubOpen ? null : link.name);
                           }}
                           className="text-white hover:text-[#C8A400] p-2 focus:outline-none transition-transform duration-200"
-                          aria-label="Toggle About Submenu"
+                          aria-label={`Toggle ${link.name} Submenu`}
                         >
                           <ChevronDown
                             className={`w-6 h-6 transition-transform duration-300 ${
-                              aboutOpen ? "rotate-180 text-[#C8A400]" : ""
+                              isSubOpen ? "rotate-180 text-[#C8A400]" : ""
                             }`}
                           />
                         </button>
@@ -206,7 +223,7 @@ export default function Navbar() {
 
                       {/* Submenu List */}
                       <AnimatePresence>
-                        {aboutOpen && (
+                        {isSubOpen && (
                           <motion.div
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: "auto" }}
@@ -221,7 +238,7 @@ export default function Navbar() {
                                   key={sub.href}
                                   href={sub.href}
                                   onClick={() => setIsOpen(false)}
-                                  className={`text-base sm:text-xl uppercase tracking-widest font-light transition-colors duration-200 block ${
+                                  className={`text-lg sm:text-xl uppercase tracking-widest font-light transition-colors duration-200 block ${
                                     isSubActive
                                       ? "text-[#C8A400] font-normal"
                                       : "text-gray-300 hover:text-[#C8A400]"
@@ -244,7 +261,7 @@ export default function Navbar() {
                     <Link
                       href={link.href}
                       onClick={() => setIsOpen(false)}
-                      className={`text-2xl sm:text-4xl md:text-5xl uppercase tracking-widest font-light transition-colors duration-300 block ${
+                      className={`text-3xl sm:text-4xl md:text-5xl uppercase tracking-widest font-light transition-colors duration-300 block ${
                         isActive
                           ? "text-[#C8A400]"
                           : "text-white hover:text-[#C8A400]"

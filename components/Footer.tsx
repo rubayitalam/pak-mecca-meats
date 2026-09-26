@@ -44,7 +44,7 @@ export default function Footer() {
             <span className="text-xs font-bold uppercase tracking-widest text-[#C8A400]">
               Navigation
             </span>
-            <ul className="space-y-4 text-xs font-semibold uppercase tracking-widest">
+            <ul className="space-y-3 text-xs font-semibold uppercase tracking-widest">
               <li>
                 <Link href="/" className="text-gray-400 hover:text-[#C8A400] transition-colors duration-200">
                   Home
@@ -58,6 +58,16 @@ export default function Footer() {
               <li>
                 <Link href="/products" className="text-gray-400 hover:text-[#C8A400] transition-colors duration-200">
                   Our Products
+                </Link>
+              </li>
+              <li>
+                <Link href="/responsibilities/food-safety" className="text-gray-400 hover:text-[#C8A400] transition-colors duration-200">
+                  Food Safety &amp; Nutrition
+                </Link>
+              </li>
+              <li>
+                <Link href="/responsibilities/community" className="text-gray-400 hover:text-[#C8A400] transition-colors duration-200">
+                  Community Responsibility
                 </Link>
               </li>
               <li>

@@ -20,6 +20,8 @@ import {
   BarChart2,
   Clock,
   Heart,
+  Utensils,
+  HandHeart,
 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -44,6 +46,11 @@ const aboutSubNavItems: SubNavItem[] = [
   { name: "Overview (About)", href: "/admin/dashboard/about", icon: LayoutGrid },
 ];
 
+const responsibilitiesSubNavItems: SubNavItem[] = [
+  { name: "Food Safety", href: "/admin/dashboard/food-safety", icon: Utensils },
+  { name: "Community", href: "/admin/dashboard/community", icon: HandHeart },
+];
+
 const navItems: NavItem[] = [
   { name: "Home Page", href: "/admin/dashboard/home", icon: Home },
   {
@@ -52,6 +59,11 @@ const navItems: NavItem[] = [
     subItems: aboutSubNavItems,
   },
   { name: "Products Page", href: "/admin/dashboard/products", icon: LayoutGrid },
+  {
+    name: "Responsibilities",
+    icon: ShieldCheck,
+    subItems: responsibilitiesSubNavItems,
+  },
   { name: "Assurance Page", href: "/admin/dashboard/assurance", icon: ShieldCheck },
   { name: "Culture Page", href: "/admin/dashboard/culture", icon: Users },
   { name: "Media Page", href: "/admin/dashboard/media", icon: Film },
@@ -70,7 +82,12 @@ export default function AdminSidebar() {
     pathname.startsWith("/admin/dashboard/values") ||
     pathname === "/admin/dashboard/about";
 
+  const isRespGroupActive =
+    pathname.startsWith("/admin/dashboard/food-safety") ||
+    pathname.startsWith("/admin/dashboard/community");
+
   const [aboutOpen, setAboutOpen] = useState(isAboutGroupActive);
+  const [respOpen, setRespOpen] = useState(isRespGroupActive);
 
   const handleLogout = async () => {
     try {
@@ -105,13 +122,19 @@ export default function AdminSidebar() {
             {navItems.map((item) => {
               const Icon = item.icon;
               if (item.subItems) {
+                const isAboutGroup = item.name === "About Us";
+                const isGroupActive = isAboutGroup ? isAboutGroupActive : isRespGroupActive;
+                const isGroupOpen = isAboutGroup ? aboutOpen : respOpen;
+                const toggleGroup = () =>
+                  isAboutGroup ? setAboutOpen(!aboutOpen) : setRespOpen(!respOpen);
+
                 return (
                   <div key={item.name} className="space-y-2">
                     <button
                       type="button"
-                      onClick={() => setAboutOpen(!aboutOpen)}
+                      onClick={toggleGroup}
                       className={`flex items-center justify-between w-full p-3 rounded font-medium transition-colors ${
-                        isAboutGroupActive
+                        isGroupActive
                           ? "bg-brand-green/30 text-white"
                           : "hover:bg-white/5 text-gray-300 hover:text-white"
                       }`}
@@ -122,11 +145,11 @@ export default function AdminSidebar() {
                       </div>
                       <ChevronDown
                         className={`w-4 h-4 transition-transform ${
-                          aboutOpen ? "rotate-180" : ""
+                          isGroupOpen ? "rotate-180" : ""
                         }`}
                       />
                     </button>
-                    {aboutOpen && (
+                    {isGroupOpen && (
                       <div className="pl-6 space-y-2 border-l border-white/10 ml-3">
                         {item.subItems.map((sub) => {
                           const SubIcon = sub.icon;
@@ -199,13 +222,19 @@ export default function AdminSidebar() {
           {navItems.map((item) => {
             const Icon = item.icon;
             if (item.subItems) {
+              const isAboutGroup = item.name === "About Us";
+              const isGroupActive = isAboutGroup ? isAboutGroupActive : isRespGroupActive;
+              const isGroupOpen = isAboutGroup ? aboutOpen : respOpen;
+              const toggleGroup = () =>
+                isAboutGroup ? setAboutOpen(!aboutOpen) : setRespOpen(!respOpen);
+
               return (
                 <div key={item.name} className="space-y-1">
                   <button
                     type="button"
-                    onClick={() => setAboutOpen(!aboutOpen)}
+                    onClick={toggleGroup}
                     className={`flex items-center justify-between w-full px-4 py-3 rounded font-medium transition-all duration-200 ${
-                      isAboutGroupActive
+                      isGroupActive
                         ? "bg-brand-green/20 text-white"
                         : "text-gray-400 hover:bg-white/5 hover:text-white"
                     }`}
@@ -216,12 +245,12 @@ export default function AdminSidebar() {
                     </div>
                     <ChevronDown
                       className={`w-4 h-4 transition-transform duration-200 ${
-                        aboutOpen ? "rotate-180 text-brand-gold" : ""
+                        isGroupOpen ? "rotate-180 text-brand-gold" : ""
                       }`}
                     />
                   </button>
 
-                  {aboutOpen && (
+                  {isGroupOpen && (
                     <div className="pl-4 space-y-1 border-l border-white/10 ml-4 py-1">
                       {item.subItems.map((sub) => {
                         const SubIcon = sub.icon;
